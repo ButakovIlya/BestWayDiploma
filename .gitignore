@@ -3,6 +3,8 @@
 !.env.example
 
 node_modules/
+BestayUI/package.json
+BestayUI/package-lock.json
 .next/
 __pycache__/
 .pytest_cache/
