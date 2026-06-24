@@ -176,6 +176,10 @@ services:
       TASK__APP_NAME: ${TASK__APP_NAME}
       TASK__BROKER_URL: redis://redis:6379/0
       TASK__RESULT_URL: redis://redis:6379/1
+      PUSHER__APP_ID: ${PUSHER__APP_ID}
+      PUSHER__KEY: ${PUSHER__KEY}
+      PUSHER__SECRET: ${PUSHER__SECRET}
+      PUSHER__CLUSTER: ${PUSHER__CLUSTER}
     ports:
       - "${FLOWER_PORT}:5555"
     depends_on:

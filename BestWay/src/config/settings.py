@@ -132,12 +132,6 @@ class ChatGPTSettings(BaseSettings):
     api_key: str = "secret"
     model: str = "gpt-5.4-nano"
 
-    full_mode_prompt_id: str = "pmpt_69c9072cd8f88193993ec44b7c0443e50493d6a427eefece"
-    full_mode_prompt_version: int | None = None
-    
-    partial_mode_prompt_id: str = "pmpt_69ca5579d9748193a7d73819f585dddf06bd8077c5e815e5"
-    partial_mode_prompt_version: int | None = None
-
     max_responses_per_day: int = 25
     request_delay: int = 1  # в секундах
     max_request_retries: int = 3
