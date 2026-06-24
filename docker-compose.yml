@@ -42,7 +42,7 @@ services:
       bash -c "alembic upgrade head &&
       uvicorn src.main:app --host 0.0.0.0 --port 8000 --workers ${UVICORN_WORKERS}"
     environment:
-      PYTHONPATH: /src
+      PYTHONPATH: ${PYTHONPATH}
       PYTHONUNBUFFERED: 1
       APP__TITTLE: ${APP__TITTLE}
       APP__VERSION: ${APP__VERSION}
@@ -116,7 +116,7 @@ services:
     restart: unless-stopped
     command: celery -A src.worker:app worker --loglevel=info --hostname=bestway
     environment:
-      PYTHONPATH: /src
+      PYTHONPATH: ${PYTHONPATH}
       PYTHONUNBUFFERED: 1
       APP__TITTLE: ${APP__TITTLE}
       APP__VERSION: ${APP__VERSION}
@@ -172,7 +172,7 @@ services:
     restart: unless-stopped
     command: celery -A src.worker:app flower --port=5555
     environment:
-      PYTHONPATH: /src
+      PYTHONPATH: ${PYTHONPATH}
       TASK__APP_NAME: ${TASK__APP_NAME}
       TASK__BROKER_URL: redis://redis:6379/0
       TASK__RESULT_URL: redis://redis:6379/1
