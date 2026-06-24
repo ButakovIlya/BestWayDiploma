@@ -1,8 +1,17 @@
 export const correctUrl = (url: string) => {
-  const sliceEdge = url.includes("http") ? 3 : 0;
-  const urlParts = url.split("/").slice(sliceEdge);
-  urlParts.unshift(process.env.NEXT_PUBLIC_BACKEND_API_URL ?? "");
-  const newUrl = urlParts.join("/");
+  if (!url) {
+    return url;
+  }
 
-  return newUrl;
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+
+  const origin = (process.env.NEXT_PUBLIC_BACKEND_API_URL ?? "").replace(
+    /\/$/,
+    "",
+  );
+  const path = url.startsWith("/") ? url : `/${url}`;
+
+  return `${origin}${path}`;
 };

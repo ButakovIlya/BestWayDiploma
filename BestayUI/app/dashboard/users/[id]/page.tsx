@@ -6,8 +6,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 import { Check, X } from "lucide-react";
-import Image from "next/image";
-import { correctUrl } from "@/app/lib/correct-url";
+import { BackendImage } from "@/app/components/backend-image";
 import DashboardHeader from "../../components/dashboard-header/dashboard-header";
 import { Skeleton } from "@/app/components/ui/skeleton";
 import { ViewField } from "@/app/types/view-field";
@@ -41,10 +40,10 @@ export default function Page() {
       <div className={styles["page__content"]}>
         {user?.photo ? (
           <div className="relative w-[350px] h-[250px]">
-            <Image
+            <BackendImage
               className="object-cover"
               fill
-              src={correctUrl(user.photo)}
+              src={user.photo}
               alt="Фото"
             />
           </div>

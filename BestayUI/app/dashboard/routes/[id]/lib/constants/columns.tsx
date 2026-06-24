@@ -1,7 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Place } from "@/app/dashboard/types";
-import Image from "next/image";
-import { correctUrl } from "@/app/lib/correct-url";
+import { BackendImage } from "@/app/components/backend-image";
 
 export const columns: ColumnDef<Place>[] = [
   {
@@ -25,8 +24,8 @@ export const columns: ColumnDef<Place>[] = [
     header: "Фото",
     cell: ({ row }) =>
       row.original.photo ? (
-        <Image
-          src={correctUrl(row.original.photo)}
+        <BackendImage
+          src={row.original.photo}
           width={200}
           height={100}
           alt="Фото"

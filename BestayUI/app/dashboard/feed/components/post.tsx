@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "./post.module.css";
-import Image from "next/image";
+import { BackendImage } from "@/app/components/backend-image";
 import { PlacePreview } from "./place-preview";
 import { Heart, MessageCircle, Plus, Trash } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
@@ -72,7 +72,7 @@ export const Post = (props: PostProps) => {
     <div className={styles.post}>
       <div className={styles["post__header"]}>
         <div>
-          <Image
+          <BackendImage
             alt="avatar"
             src={
               author.photo ||
@@ -101,7 +101,7 @@ export const Post = (props: PostProps) => {
       </div>
       <div className={styles["post__text"]}>{text}</div>
       {photo && (
-        <Image
+        <BackendImage
           alt="avatar"
           src={photo}
           width={700}

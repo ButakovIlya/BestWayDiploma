@@ -1,7 +1,7 @@
 import { Button } from "@/app/components/ui/button";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import styles from "./create-post.module.css";
-import Image from "next/image";
+import { BackendImage } from "@/app/components/backend-image";
 import { useAppStore } from "@/app/_store/app-store";
 import { Input } from "@/app/components/ui/input";
 import { createPost, getPosts } from "@/app/lib/api/public/posts";
@@ -110,7 +110,7 @@ export default function CreatePost() {
     <div ref={containerRef} className={styles["container"]}>
       <div className="flex flex-col gap-3">
         <div className={styles["input-container"]}>
-          <Image
+          <BackendImage
             alt="avatar"
             src={
               user?.photo ??

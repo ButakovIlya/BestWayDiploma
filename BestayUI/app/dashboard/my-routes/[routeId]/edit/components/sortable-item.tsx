@@ -9,7 +9,7 @@ import { GripVertical, MapPinned, Trash, WandSparkles } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import { useAppStore } from "@/app/_store/app-store";
 import { Place } from "@/app/dashboard/types";
-import Image from "next/image";
+import { BackendImage } from "@/app/components/backend-image";
 import { useIsMobile } from "@/app/hooks/use-mobile";
 import styles from "./sortable-item.module.css";
 
@@ -89,7 +89,7 @@ export function SortableItem(props: SortableItemProps) {
               </div>
               {isMobile && item.photo && (
                 <div className={styles["photo"]}>
-                  <Image src={item.photo} alt="Фото" width={250} height={100} />
+                  <BackendImage src={item.photo} alt="Фото" width={250} height={100} />
                 </div>
               )}
             </div>
@@ -97,7 +97,7 @@ export function SortableItem(props: SortableItemProps) {
           <div className="flex items-center gap-5">
             {!isMobile && !customPlace && item.photo && (
               <div className={styles["photo"]}>
-                <Image src={item.photo} alt="Фото" width={250} height={100} />
+                <BackendImage src={item.photo} alt="Фото" width={250} height={100} />
               </div>
             )}
             <div className="flex gap-2 flex-wrap justify-end">

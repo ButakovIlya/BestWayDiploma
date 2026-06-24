@@ -8,7 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "./ui/carousel";
-import Image from "next/image";
+import { BackendImage } from "@/app/components/backend-image";
 import { Input } from "./ui/input";
 import { ChangeEvent, useCallback, useRef } from "react";
 import { Photo } from "../types";
@@ -62,7 +62,7 @@ export function PhotoCarousel(props: PhotoCarouselProps) {
             {photo.url ? (
               photo.main ? (
                 <div>
-                  <Image
+                  <BackendImage
                     className={styles["photo"]}
                     src={photo.url}
                     alt="Фото"
@@ -88,7 +88,7 @@ export function PhotoCarousel(props: PhotoCarouselProps) {
                 </div>
               ) : (
                 <div>
-                  <Image
+                  <BackendImage
                     className={styles["photo"]}
                     src={photo.url}
                     alt="Фото"

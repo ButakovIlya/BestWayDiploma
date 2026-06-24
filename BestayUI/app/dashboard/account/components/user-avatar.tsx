@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import { BackendImage } from "@/app/components/backend-image";
 import { Button } from "@/app/components/ui/button";
 import { Plus } from "lucide-react";
 import { ChangeEvent, useCallback, useRef } from "react";
@@ -39,7 +39,7 @@ export function UserAvatar() {
     <div>
       {user?.photo ? (
         <div className="relative w-[350px] h-[250px]">
-          <Image className="object-cover" src={user.photo} alt="photo" fill />
+          <BackendImage className="object-cover" src={user.photo} alt="photo" fill />
           <Button
             variant="outline"
             className="relative top-[10px] left-[300px]"

@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import styles from "./comment.module.css";
-import Image from "next/image";
+import { BackendImage } from "@/app/components/backend-image";
 import { useAppStore } from "@/app/_store/app-store";
 import { Trash } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
@@ -22,7 +22,7 @@ export function Comment(props: CommentProps) {
     <div className={styles["container"]}>
       <div>
         <div>
-          <Image
+          <BackendImage
             alt="avatar"
             src={
               avatar ||

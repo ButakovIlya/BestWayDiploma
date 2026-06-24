@@ -18,7 +18,7 @@ import { useAppStore } from "@/app/_store/app-store";
 import clsx from "clsx";
 import styles from "./dashboard-sidebar.module.css";
 import { SidebarPages } from "../types/sidebar-pages";
-import Image from "next/image";
+import { BackendImage } from "@/app/components/backend-image";
 
 export function DashboardSidebar() {
   const {
@@ -100,7 +100,7 @@ export function DashboardSidebar() {
                   setIsSidebarOpened(false);
                 }}
               >
-                <Image
+                <BackendImage
                   alt="avatar"
                   src={
                     user?.photo ||

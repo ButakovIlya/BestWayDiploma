@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { BackendImage } from "@/app/components/backend-image";
 import styles from "./place-preview.module.css";
 import { MAP_PIN_COLORS, MAP_PIN_LETTERS } from "@/app/lib/constants/map-pin";
 import { BASE_COLOR } from "@/app/lib/constants/base-color";
@@ -44,7 +44,7 @@ export function PlacePreview(props: PlacePreviewProps) {
         </div>
       </div>
       <div className={styles["place-container__photo-containter"]}>
-        <Image
+        <BackendImage
           src={
             photo ||
             "https://images.unsplash.com/photo-1589370417257-319ba6654bde?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
