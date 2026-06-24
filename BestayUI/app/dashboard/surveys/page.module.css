@@ -1,0 +1,8 @@
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-container {
+  height: calc(100dvh - 78px);
+}

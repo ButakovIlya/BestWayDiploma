@@ -1,0 +1,18 @@
+.selected {
+  background: #b8e1ff;
+  transition:
+    background-color 0.3s ease-in-out,
+    color 0.3s ease-in-out;
+}
+
+.selected:hover {
+  background: #add3ee;
+}
+
+.header__user-avatar {
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  object-fit: cover;
+  aspect-ratio: 1 / 1;
+}

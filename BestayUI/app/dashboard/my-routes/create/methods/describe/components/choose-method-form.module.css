@@ -1,0 +1,22 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+}
+
+.form-container__fields {
+  display: flex;
+  flex-direction: column;
+  margin: auto 0;
+  gap: 10px;
+}
+
+.form-container__control {
+  align-self: flex-end;
+}
+
+.form-container__control button {
+  padding: 0px 15px;
+}

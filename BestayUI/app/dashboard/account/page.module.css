@@ -1,0 +1,58 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  height: 100%;
+}
+
+.page__title {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.page__scroll-area {
+  height: calc(100dvh - 134px);
+}
+
+.page__content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.content__stat {
+  display: flex;
+  gap: 30px;
+}
+
+.content__user {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.content__user-info {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.user__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.user__info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user__info div p:first-child {
+  font-weight: 600;
+}

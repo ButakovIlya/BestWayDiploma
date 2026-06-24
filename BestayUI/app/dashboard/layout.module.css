@@ -1,0 +1,19 @@
+.layout {
+  display: flex;
+}
+
+.layout__children--desktop {
+  width: calc(100vw - 48px);
+}
+
+.layout__children--mobile {
+  width: 100%;
+}
+
+.layout__trigger-wrapper {
+  z-index: 49;
+  width: 0px;
+  position: sticky;
+  display: flex;
+  flex-direction: column-reverse;
+}

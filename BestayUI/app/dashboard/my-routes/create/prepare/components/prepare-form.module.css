@@ -1,0 +1,30 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap:10px
+}
+
+.form-container__scroll-area {
+  height: calc(100svh - 329px);
+  width: 60%;
+}
+
+.form-container__fields {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+
+  gap: 10px;
+}
+
+.form-container__control {
+  align-self: flex-end;
+}
+
+.form-container__control button {
+  padding: 30px 15px;
+}

@@ -1,0 +1,14 @@
+.page__content {
+  display: flex;
+  gap: 10px;
+}
+
+.content__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.content__fields div p:first-child {
+  font-weight: 600;
+}

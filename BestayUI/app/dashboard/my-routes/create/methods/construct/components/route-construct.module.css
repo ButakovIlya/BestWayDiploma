@@ -1,0 +1,16 @@
+.construct-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.construct-container__constructor {
+  height: calc(100dvh - 172px);
+  overflow-y: auto;
+}
+
+.construct-container__buttons{
+  display: flex;
+  justify-content: right;
+}

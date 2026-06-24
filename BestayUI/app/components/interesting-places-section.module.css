@@ -1,0 +1,135 @@
+.section-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+
+.section-container .title {
+  width: 80%;
+  align-self: center;
+}
+
+.section-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #eaeaef;
+  border-radius: 60px;
+  height: 500px;
+  padding: 25px 0;
+}
+
+.section-inner > div:first-child {
+  width: 80%;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.routes-container {
+  display: flex;
+  gap: 25px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+}
+
+.routes-container::-webkit-scrollbar {
+  height: 5px;
+  background: transparent;
+}
+
+.routes-container::-webkit-scrollbar-thumb {
+  background: #006096;
+  border-radius: 10px;
+}
+
+.route-card {
+  height: 400px;
+  min-width: 350px;
+  border-radius: 30px;
+  background-size: auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.route-card > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.route-card > div:first-child > div:first-child {
+  background: rgba(255, 255, 255, 0.737);
+  display: flex;
+  justify-content: center;
+  border-radius: 14px;
+  padding: 10px 15px;
+}
+
+.route-card > div:last-child {
+  background-color: rgba(255, 255, 255, 0.944);
+  border-radius: 30px;
+  padding: 10px 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.route-card > div:last-child > div:first-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.route-card > div:last-child > div:first-child p {
+  font-weight: 500;
+}
+
+.route-card > div:last-child > div:first-child p:last-child {
+  color: #4a4a6a;
+}
+
+.route-card > div:last-child > div:last-child {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.route-card > div:last-child > div:last-child p {
+  font-weight: 300;
+  text-transform: uppercase;
+  color: #4a4a6a;
+}
+
+.pin-route {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.route-line {
+  position: absolute;
+  top: 24px;
+  background: #4a4a6a;
+  height: 20px;
+  width: 3px;
+  background: linear-gradient(to bottom, #4a4a6a 0%, rgba(74, 74, 126, 0) 100%);
+}
+
+@media (max-width: 768px) {
+  .route-card {
+    min-width: 325px;
+  }
+}
+
+.pill-button {
+  padding: 5px;
+  background-color: #ffffff;
+  border-radius: 50%;
+}

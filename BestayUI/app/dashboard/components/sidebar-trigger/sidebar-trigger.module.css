@@ -1,0 +1,23 @@
+.dashboard-sidebar__trigger {
+  margin-bottom: 10px;
+  margin-left: -10px;
+  z-index: 999;
+  height: 25px;
+  width: 25px;
+}
+
+.dashboard-sidebar__trigger--desktop--opened {
+  left: 240px;
+}
+
+.dashboard-sidebar__trigger--desktop--closed {
+  left: 40px;
+}
+
+.dashboard-sidebar__trigger--mobile--opened {
+  display: none;
+}
+
+.dashboard-sidebar__trigger--mobile--closed {
+  margin-left: 5px;
+}

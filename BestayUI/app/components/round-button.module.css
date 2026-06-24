@@ -1,0 +1,22 @@
+.button {
+  font-size: 14px;
+  border-radius: 50px;
+  border: 2px black solid;
+  padding: 16px 30px;
+  font-weight: 500;
+  background: linear-gradient(
+    rgba(232, 232, 232, 0.907),
+    rgba(255, 255, 255, 0.536)
+  );
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+@media (max-width: 750px) {
+  .button {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}

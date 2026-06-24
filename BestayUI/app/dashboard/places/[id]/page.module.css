@@ -1,0 +1,25 @@
+.page__content-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.page__content {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.page__content__photos {
+  display: flex;
+  flex-direction: row;
+}
+
+.content__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.content__fields div p:first-child {
+  font-weight: 600;
+}
