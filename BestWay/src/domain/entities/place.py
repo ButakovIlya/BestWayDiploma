@@ -1,0 +1,37 @@
+from typing import List
+
+from domain.entities.entity import Entity
+from domain.entities.enums import CityCategory, PlaceCategory, PlaceType
+
+
+class Place(Entity):
+    def __init__(
+        self,
+        id: int | None = None,
+        city: CityCategory | None = None,
+        website_url: str | None = None,
+        name: str | None = None,
+        description: str | None = None,
+        category: PlaceCategory | None = None,
+        type: PlaceType | None = None,
+        object_id: int | None = None,
+        tags: str | None = None,
+        coordinates: List[float] | None = None,
+        photo: str | None = None,
+        photos: List[str] | None = None,
+        map_name: str | None = None,
+    ) -> None:
+        super().__init__(id)
+
+        self.name = name
+        self.website_url = website_url
+        self.description = description
+        self.city = city
+        self.category = category
+        self.type = type
+        self.tags = tags
+        self.coordinates = coordinates
+        self.object_id = object_id
+        self.photo = photo
+        self.photos = photos
+        self.map_name = map_name

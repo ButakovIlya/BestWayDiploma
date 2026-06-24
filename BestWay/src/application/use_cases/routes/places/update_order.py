@@ -1,0 +1,24 @@
+from application.use_cases.base import UseCase
+from application.use_cases.routes.places.dto import RoutePlacesOrderUpdateDTO
+from common.exceptions import APIException
+from domain.entities.route import Route
+from domain.entities.route_places import RoutePlaces
+from infrastructure.uow.base import UnitOfWork
+
+
+class RoutePlaceUpdateOrderUseCase(UseCase):
+    """
+    Add route place.
+    """
+
+    def __init__(self, uow: UnitOfWork) -> None:
+        self._uow = uow
+
+    async def execute(self, route_id: int, data: RoutePlacesOrderUpdateDTO) -> None:
+        async with self._uow(autocommit=True):
+            route: Route = await self._uow.routes.get_by_id(route_id)
+            if not route:
+                raise APIException(code=404, message=f"Маршрут с id={route_id} не найден")
+
+            for place_id, order in data.order_dict.items():
+                await self._uow.route_places.update_order(place_id, order)

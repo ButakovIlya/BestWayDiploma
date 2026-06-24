@@ -1,0 +1,14 @@
+from datetime import timedelta, timezone
+
+USERS_MAX_ROUTES_COUNT = 100
+USERS_MAX_SURVEYS_COUNT = 50
+USERS_MAX_COMMENTS_COUNT = 50
+MIN_PLACES_COUNT = 2
+MAX_PLACES_COUNT = 10
+
+MAX_FIELD_SIZE = 10_000
+MAX_PROMPT_LENGHT = 1000
+
+
+TIME_ZONE = timezone(timedelta(hours=5))
+EDIT_TIME_LIMIT = timedelta(hours=24)
