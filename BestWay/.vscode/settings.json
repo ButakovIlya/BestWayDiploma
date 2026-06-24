@@ -1,0 +1,14 @@
+{
+  
+  "terminal.integrated.defaultProfile.windows": "Ubuntu (WSL)",
+  "terminal.integrated.profiles.windows": {
+    "Ubuntu": {
+      "source": "Git Bash",
+      "args": [],
+      "overrideName": true,
+      "icon": "terminal-ubuntu"
+    }
+  },
+  "terminal.integrated.initialCommand": "set -a && source .env 2>/dev/null || set +a",
+  "python.terminal.useEnvFile": true
+}
