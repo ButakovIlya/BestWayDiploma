@@ -6,7 +6,7 @@ import { requestData } from "../request";
 
 export function getComments(postId: number) {
   return requestData<PaginatedResponseCommentRead>(
-    `/api/public/comments?post_id=${postId}&page_size=100`,
+    `/api/public/comments/?post_id=${postId}&page_size=100`,
     {},
   );
 }

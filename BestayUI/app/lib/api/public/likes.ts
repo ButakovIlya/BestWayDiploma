@@ -3,7 +3,7 @@ import { requestData } from "../request";
 
 export function getLikes(postId: number) {
   return requestData<PaginatedResponseLikeRead>(
-    `/api/public/likes?post_id=${postId}&page_size=100`,
+    `/api/public/likes/?post_id=${postId}&page_size=100`,
     {},
   );
 }

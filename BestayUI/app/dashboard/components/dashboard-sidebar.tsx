@@ -10,6 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/app/components/ui/sidebar";
 import Link from "next/link";
 import {
@@ -61,11 +62,17 @@ export function DashboardSidebar() {
     account: { user },
     ui: { currentPage, setIsSidebarOpened },
   } = useAppStore((state) => state);
+  const { state: sidebarState } = useSidebar();
+  const isCollapsed = sidebarState === "collapsed";
 
   const BrandIcon = BRAND_ICON;
 
   return (
-    <Sidebar variant="sidebar" collapsible="icon" className={styles.sidebar}>
+    <Sidebar
+      variant="sidebar"
+      collapsible="icon"
+      className={clsx(styles.sidebar, isCollapsed && styles["sidebar--collapsed"])}
+    >
       <SidebarContent style={{ overflowX: "hidden" }}>
         <div className={styles.brand}>
           <div className={styles["brand__icon"]}>
@@ -103,7 +110,7 @@ export function DashboardSidebar() {
             <Separator orientation="horizontal" className={styles.separator} />
             <div className={styles["admin-badge"]}>
               <ShieldCheck size={14} />
-              Администрирование
+              <span className={styles["admin-badge__text"]}>Администрирование</span>
             </div>
             <SidebarGroup>
               <SidebarGroupContent>
