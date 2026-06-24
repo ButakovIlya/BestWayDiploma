@@ -138,11 +138,16 @@ class ChatGPTRouteGenerateUseCase(UseCase):
 
                 survey: Survey = await self._uow.surveys.get_by_id(survey_id)
 
+                route_name = (survey.prompt or survey.name or validated_route_data.name or "").strip()
+                if len(route_name) > 200:
+                    route_name = f"{route_name[:197]}..."
+
                 route: Route = await self._uow.routes.create(
                     Route(
                         **validated_route_data.model_dump(exclude={"name"}),
                         city=survey.city,
-                        name=survey.name,
+                        name=route_name or validated_route_data.name,
+                        description=survey.prompt,
                     )
                 )
 

@@ -30,14 +30,18 @@ class OpenAIRoutePlacesTools:
             {
                 "type": "function",
                 "name": "get_all_places",
-                "description": "Return raw places rows available for route generation.",
+                "description": "Return raw places rows available for route generation. Filter by city when provided.",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "limit": {
                             "anyOf": [{"type": "integer", "minimum": 1}, {"type": "null"}],
                             "description": "Optional maximum number of rows to return.",
-                        }
+                        },
+                        "city": {
+                            "anyOf": [{"type": "string"}, {"type": "null"}],
+                            "description": "Optional city filter, e.g. Пермь.",
+                        },
                     },
                     "additionalProperties": False,
                 },
@@ -85,7 +89,7 @@ class OpenAIRoutePlacesTools:
         if name == "describe_places_schema":
             return self.describe_places_schema()
         if name == "get_all_places":
-            return self.get_all_places(limit=arguments.get("limit"))
+            return self.get_all_places(limit=arguments.get("limit"), city=arguments.get("city"))
         if name == "get_places_by_ids":
             return self.get_places_by_ids(place_ids=arguments["place_ids"])
         if name == "build_ordered_route_candidates":
@@ -127,20 +131,26 @@ class OpenAIRoutePlacesTools:
             },
         }
 
-    def get_all_places(self, limit: int | None = None) -> dict[str, Any]:
+    def get_all_places(self, limit: int | None = None, city: str | None = None) -> dict[str, Any]:
         sql = (
             "SELECT id, name, category, type, tags, map_name, city, coordinates, description "
-            "FROM public.places ORDER BY 1"
+            "FROM public.places"
         )
-        params: tuple[Any, ...] = ()
+        params: list[Any] = []
+
+        if city:
+            sql += " WHERE city = %s"
+            params.append(city)
+
+        sql += " ORDER BY 1"
 
         if limit is not None:
             sql += " LIMIT %s"
-            params = (limit,)
+            params.append(limit)
 
         with self._connection() as conn:
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
-                cur.execute(sql, params)
+                cur.execute(sql, tuple(params))
                 rows = [dict(row) for row in cur.fetchall()]
 
         return {

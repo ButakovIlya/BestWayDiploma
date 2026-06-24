@@ -98,6 +98,7 @@ class BaseClassificationManager(ClassificationManager):
 
         survey_data = data.get("survey_data") or {}
         user_data = data.get("user_data") or {}
+        survey_preferences = survey_data.get("data") or {}
 
         if mode == Mode.FULL:
             return {
@@ -105,6 +106,9 @@ class BaseClassificationManager(ClassificationManager):
                 "survey_data": survey_data,
                 "city": survey_data.get("city") or "",
                 "prompt": survey_data.get("prompt") or "",
+                "preferred_transport": survey_preferences.get("preferred_transport") or "",
+                "preferences": survey_preferences.get("questions") or {},
+                "order_matters": survey_preferences.get("order_matters"),
             }
 
         return {
