@@ -10,7 +10,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/app/components/ui/sidebar";
 import Link from "next/link";
 import {
@@ -30,18 +29,15 @@ import { ShieldCheck } from "lucide-react";
 function NavLink({
   item,
   isActive,
-  onNavigate,
 }: {
   item: (typeof PUBLIC_URLS)[number];
   isActive: boolean;
-  onNavigate: () => void;
 }) {
   return (
     <SidebarMenuButton asChild tooltip={item.title}>
       <Link
         href={item.url}
         className={clsx(isActive && styles["selected"])}
-        onClick={onNavigate}
       >
         <item.icon />
         <span className={styles["nav-item"]}>
@@ -60,19 +56,13 @@ function NavLink({
 export function DashboardSidebar() {
   const {
     account: { user },
-    ui: { currentPage, setIsSidebarOpened },
+    ui: { currentPage },
   } = useAppStore((state) => state);
-  const { state: sidebarState } = useSidebar();
-  const isCollapsed = sidebarState === "collapsed";
 
   const BrandIcon = BRAND_ICON;
 
   return (
-    <Sidebar
-      variant="sidebar"
-      collapsible="icon"
-      className={clsx(styles.sidebar, isCollapsed && styles["sidebar--collapsed"])}
-    >
+    <Sidebar variant="sidebar" collapsible="none" className={styles.sidebar}>
       <SidebarContent style={{ overflowX: "hidden" }}>
         <div className={styles.brand}>
           <div className={styles["brand__icon"]}>
@@ -94,7 +84,6 @@ export function DashboardSidebar() {
                       <NavLink
                         item={item}
                         isActive={currentPage === item.page}
-                        onNavigate={() => setIsSidebarOpened(false)}
                       />
                     </SidebarMenuItem>
                   ))
@@ -120,7 +109,6 @@ export function DashboardSidebar() {
                       <NavLink
                         item={item}
                         isActive={currentPage === item.page}
-                        onNavigate={() => setIsSidebarOpened(false)}
                       />
                     </SidebarMenuItem>
                   ))}
@@ -140,9 +128,6 @@ export function DashboardSidebar() {
                 className={clsx(
                   currentPage === SidebarPages.Account && styles["selected"],
                 )}
-                onClick={() => {
-                  setIsSidebarOpened(false);
-                }}
               >
                 <BackendImage
                   alt="avatar"

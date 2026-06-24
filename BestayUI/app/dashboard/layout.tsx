@@ -2,7 +2,6 @@
 import styles from "./layout.module.css";
 import { DashboardSidebar } from "./components/dashboard-sidebar";
 import { SidebarProvider } from "../components/ui/sidebar";
-import { SidebarTrigger } from "./components/sidebar-trigger/sidebar-trigger";
 import { Toaster } from "../components/ui/sonner";
 import { useEffect, useState } from "react";
 import { getProfile } from "../lib/api/public/profile";
@@ -28,7 +27,6 @@ export default function Layout(props: React.PropsWithChildren) {
   const { children } = props;
   const {
     account: { setUser },
-    ui: { isSidebarOpened },
   } = useAppStore((state) => state);
   const [channelName, setChannelName] = useState("");
   const [isNewUser, setIsNewUser] = useState<boolean | null>(null);
@@ -131,11 +129,8 @@ export default function Layout(props: React.PropsWithChildren) {
           strategy="afterInteractive"
         />
         <div className={styles.layout}>
-          <SidebarProvider defaultOpen={isSidebarOpened}>
+          <SidebarProvider defaultOpen>
             <DashboardSidebar />
-            <div className={styles["layout__trigger-wrapper"]}>
-              <SidebarTrigger />
-            </div>
             <div
               className={cn(
                 isMobile
