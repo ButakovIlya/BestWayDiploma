@@ -2,15 +2,22 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 10px;
+  gap: 18px;
+  width: 100%;
 }
 
 .construct-container__constructor {
-  height: calc(100dvh - 172px);
+  height: calc(100dvh - 245px);
   overflow-y: auto;
+  border: 1px solid rgba(0, 96, 150, 0.1);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.76);
+  padding: 18px;
+  box-shadow: var(--bw-soft-shadow);
 }
 
-.construct-container__buttons{
+.construct-container__buttons {
   display: flex;
   justify-content: right;
+  gap: 12px;
 }

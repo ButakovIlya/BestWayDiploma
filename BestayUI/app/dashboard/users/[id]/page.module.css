@@ -1,14 +1,21 @@
 .page__content {
   display: flex;
-  gap: 10px;
+  gap: 24px;
+  padding: 22px;
+  border: 1px solid rgba(0, 96, 150, 0.1);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: var(--bw-soft-shadow);
+  flex-wrap: wrap;
 }
 
 .content__fields {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
 }
 
 .content__fields div p:first-child {
   font-weight: 600;
+  color: var(--bw-muted);
 }

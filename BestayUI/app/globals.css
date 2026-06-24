@@ -40,6 +40,15 @@ main h2 {
 
 :root {
   --radius: 0.625rem;
+  --bw-primary: #006096;
+  --bw-primary-dark: #004d78;
+  --bw-surface: #eaeaef;
+  --bw-surface-blue: #eaf5ff;
+  --bw-muted: #4a4a6a;
+  --bw-card-radius: 32px;
+  --bw-section-width: min(1180px, calc(100vw - 32px));
+  --bw-shadow: 0 24px 80px rgba(0, 96, 150, 0.12);
+  --bw-soft-shadow: 0 14px 45px rgba(19, 58, 91, 0.1);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -156,4 +165,36 @@ main h2 {
 
 nextjs-portal {
   display: none;
+}
+
+@layer components {
+  [data-slot="button"] {
+    border-radius: 9999px;
+  }
+
+  [data-slot="button"][data-variant="default"],
+  button[data-slot="button"]:not([data-variant]) {
+    box-shadow: 0 12px 28px rgba(0, 96, 150, 0.2);
+  }
+
+  input[data-slot="input"],
+  textarea[data-slot="textarea"],
+  button[role="combobox"] {
+    border-radius: 18px;
+    border-color: rgba(0, 96, 150, 0.18);
+    background-color: rgba(255, 255, 255, 0.86);
+  }
+
+  [data-slot="dialog-content"],
+  [data-slot="sheet-content"],
+  [data-slot="popover-content"],
+  [data-slot="dropdown-menu-content"] {
+    border-radius: 28px;
+    border-color: rgba(0, 96, 150, 0.12);
+    box-shadow: var(--bw-soft-shadow);
+  }
+
+  [data-slot="table-row"] {
+    border-color: rgba(0, 96, 150, 0.08);
+  }
 }

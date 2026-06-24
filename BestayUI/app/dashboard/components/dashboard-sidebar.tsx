@@ -27,7 +27,7 @@ export function DashboardSidebar() {
   } = useAppStore((state) => state);
 
   return (
-    <Sidebar variant="sidebar" collapsible="icon">
+    <Sidebar variant="sidebar" collapsible="icon" className={styles.sidebar}>
       <SidebarContent style={{ overflowX: "hidden" }}>
         <SidebarGroup>
           <SidebarGroupLabel>Разделы</SidebarGroupLabel>

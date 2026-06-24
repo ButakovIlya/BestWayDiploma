@@ -29,8 +29,8 @@ export function PaginationBar(props: PaginationProps) {
   }
 
   return (
-    <Pagination className="pt-[10px]">
-      <PaginationContent>
+    <Pagination className="pt-4">
+      <PaginationContent className="rounded-full border border-[#00609614] bg-white/80 px-3 py-2 shadow-[0_10px_30px_rgba(0,96,150,0.06)]">
         <PaginationItem>
           <Button
             variant="outline"
@@ -42,7 +42,9 @@ export function PaginationBar(props: PaginationProps) {
           </Button>
         </PaginationItem>
         <PaginationItem>
-          <PaginationLink>{pagination.pageIndex + 1}</PaginationLink>
+          <PaginationLink className="rounded-full font-semibold text-[#006096]">
+            {pagination.pageIndex + 1}
+          </PaginationLink>
         </PaginationItem>
         <PaginationItem>
           <Button

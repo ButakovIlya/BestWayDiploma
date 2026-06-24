@@ -53,7 +53,7 @@ export function FilterPanel<TData>(props: FilterPanelProps<TData>) {
               onValueChange={(value) => getColumn(name)?.setFilterValue(value)}
               value={(getColumn(name)?.getFilterValue() as string) ?? ""}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full min-w-[190px]">
                 <SelectValue placeholder="Выберите вариант" />
               </SelectTrigger>
               <SelectContent>
@@ -89,7 +89,7 @@ export function FilterPanel<TData>(props: FilterPanelProps<TData>) {
           return (
             <Popover key={name} modal>
               <PopoverTrigger asChild>
-                <Button variant="outline" role="combobox">
+                <Button variant="outline" role="combobox" className="min-w-[190px] justify-between bg-white/85">
                   {displayedValue as string}
                   <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -144,7 +144,7 @@ export function FilterPanel<TData>(props: FilterPanelProps<TData>) {
   return isMobile ? (
     <>
       <Sheet>
-        <SheetTrigger className="flex items-center pb-4 gap-2">
+        <SheetTrigger className="mb-4 flex items-center gap-2 rounded-full bg-[#eaf5ff] px-4 py-2 text-[#006096]">
           <ListFilter />
         </SheetTrigger>
         <SheetContent>
@@ -158,6 +158,8 @@ export function FilterPanel<TData>(props: FilterPanelProps<TData>) {
       </Sheet>
     </>
   ) : (
-    <div className="flex items-center pb-4 gap-2">{filters}</div>
+    <div className="mb-4 flex flex-wrap items-center gap-3 rounded-[26px] border border-[#00609614] bg-white/70 p-3 shadow-[0_10px_30px_rgba(0,96,150,0.06)]">
+      {filters}
+    </div>
   );
 }

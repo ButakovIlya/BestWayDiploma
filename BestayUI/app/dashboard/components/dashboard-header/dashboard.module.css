@@ -2,15 +2,37 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  gap: 16px;
+  margin-bottom: 22px;
+  padding: 18px 20px;
+  border: 1px solid rgba(0, 96, 150, 0.1);
+  border-radius: 28px;
+  background:
+    linear-gradient(135deg, rgba(234, 245, 255, 0.92), rgba(255, 255, 255, 0.82)),
+    #ffffff;
+  box-shadow: 0 12px 35px rgba(0, 96, 150, 0.08);
 }
 
 .dashboard-header__title {
-  font-size: 28px;
-  font-weight: 700;
+  color: #123047;
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
 }
 
 .dashboard-header__title--mobile {
-  font-size: 20px;
-  font-weight: 700;
+  color: #123047;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 16px;
+    border-radius: 24px;
+  }
 }

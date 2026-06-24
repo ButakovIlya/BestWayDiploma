@@ -1,8 +1,10 @@
 .page {
   display: flex;
   flex-direction: column;
+  gap: 4px;
 }
 
 .table-container {
-  height: calc(100dvh - 152px);
+  height: calc(100dvh - 215px);
+  min-height: 420px;
 }

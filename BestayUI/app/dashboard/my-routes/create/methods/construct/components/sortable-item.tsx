@@ -42,11 +42,12 @@ export function SortableItem(props: SortableItemProps) {
   const style: React.CSSProperties = {
     transform: CSS.Translate.toString(transform),
     transition,
-    borderWidth: 2,
-    borderRadius: 16,
+    border: "1px solid rgba(0, 96, 150, 0.12)",
+    borderRadius: 26,
     padding: 16,
     minHeight: 100,
-    background: "white",
+    background: "rgba(255, 255, 255, 0.9)",
+    boxShadow: "0 12px 30px rgba(0, 96, 150, 0.08)",
     touchAction: "auto",
     alignContent: "center",
   };

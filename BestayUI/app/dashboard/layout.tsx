@@ -129,10 +129,9 @@ export default function Layout(props: React.PropsWithChildren) {
               isMobile
                 ? styles["layout__children--mobile"]
                 : styles["layout__children--desktop"],
-              "p-[10px]",
             )}
           >
-            {children}
+            <div className={styles["layout__content-card"]}>{children}</div>
           </div>
         </SidebarProvider>
         <Toaster theme="light" />

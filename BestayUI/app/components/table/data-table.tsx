@@ -110,18 +110,18 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
       <Table
         containerClassname={cn(
           containerClassname,
-          "h-[80vh] overflow-auto border",
+          "h-[80vh] overflow-auto rounded-[28px] border border-[#0060961f] bg-white/90 shadow-[0_18px_55px_rgba(0,96,150,0.08)]",
         )}
         className={cn(
           className,
-          "rounded-md border-border w-full h-full overflow-clip relative",
+          "w-full h-full overflow-clip relative border-separate border-spacing-0",
         )}
       >
-        <TableHeader className="sticky top-[-1] bg-white z-10">
+        <TableHeader className="sticky top-[-1] bg-[#eaf5ff]/95 backdrop-blur z-10">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
+                <TableHead key={header.id} className="h-12 px-4 font-bold text-[#123047]">
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -133,7 +133,7 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody className="bg-white">
+        <TableBody className="bg-white/90">
           {dataLoading ? (
             <TableRow>
               <TableCell colSpan={99}>
@@ -150,8 +150,9 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
                   <TableCell
                     key={cell.id}
                     className={clsx(
+                      "px-4 py-3",
                       cell.id.includes("actions") &&
-                        "sticky right-0 z-0 bg-white/70",
+                        "sticky right-0 z-0 bg-white/85 backdrop-blur",
                     )}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

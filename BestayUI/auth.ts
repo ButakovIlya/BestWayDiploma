@@ -48,14 +48,19 @@ async function getUserProfile(
   }
 }
 
-export const { auth, signIn, signOut } = NextAuth({
+export const { auth, handlers, signIn, signOut } = NextAuth({
   ...authConfig,
   session: {
     strategy: "jwt",
   },
   callbacks: {
-    jwt: async ({ user }) => {
+    jwt: async ({ token, user }) => {
+      if (!user) {
+        return token;
+      }
+
       return {
+        ...token,
         is_admin: Boolean(user.is_admin),
         is_new_user: Boolean(user.is_new_user),
         access_token: user.access_token,
