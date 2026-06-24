@@ -104,6 +104,7 @@ class BaseClassificationManager(ClassificationManager):
             return {
                 "user_data": user_data,
                 "survey_data": survey_data,
+                "places_data": data.get("places_data") or [],
                 "city": survey_data.get("city") or "",
                 "prompt": survey_data.get("prompt") or "",
                 "preferred_transport": survey_preferences.get("preferred_transport") or "",

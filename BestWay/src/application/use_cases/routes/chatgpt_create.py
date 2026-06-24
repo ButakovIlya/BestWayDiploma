@@ -9,7 +9,6 @@ from application.use_cases.base import UseCase
 from application.use_cases.routes.enums import RouteGenerationMode as Mode
 from common.dto import RouteRead
 from common.exceptions import APIException
-from domain.entities.place import Place
 from domain.entities.route import Route
 from domain.entities.route_places import RoutePlaces
 from domain.entities.survey import Survey
@@ -59,6 +58,11 @@ class ChatGPTRouteGenerateUseCase(UseCase):
             # }
             validated_route_data = await self._validate_generated_route(route_data, user_id)
             logger.info(f"validated_route_data: {validated_route_data}")
+            if not validated_route_data.places:
+                raise APIException(
+                    code=400,
+                    message="Не удалось подобрать места по вашему запросу. Уточните пожелания.",
+                )
             route = await self._create_route(validated_route_data, survey_id)
             logger.info("Finish route chatgpt generate use case")
             route_data = RouteRead.model_validate(route).model_dump(mode="json")
@@ -90,7 +94,8 @@ class ChatGPTRouteGenerateUseCase(UseCase):
         async with self._uow(autocommit=True):
             user: User = await self._uow.users.get_by_id(user_id)
             survey: Survey = await self._uow.surveys.get_by_id(survey_id)
-            # places: List[Place] = await self._uow.places.get_list()
+            places_result = await self._uow.places.get_list_models(city=survey.city)
+            place_models = places_result.scalars().all()
 
             user_dto = ChatGPTUserData(
                 first_name=user.first_name,
@@ -103,24 +108,30 @@ class ChatGPTRouteGenerateUseCase(UseCase):
 
             survey_dto = ChatGPTSurveyData(city=survey.city, data=survey.data, places=survey.places, prompt=survey.prompt)
 
-            # places_dto = [
-            #     ChatGPTPlaceData(
-            #         id=place.id,
-            #         name=place.name,
-            #         category=place.category,
-            #         type=place.type,
-            #         tags=place.tags,
-            #         coordinates=place.coordinates,
-            #         map_name=place.map_name,
-            #     )
-            #     for place in places
-            # ]
+            places_dto = [
+                ChatGPTPlaceData(
+                    id=place.id,
+                    name=place.name or "",
+                    category=self._enum_value(place.category),
+                    type=self._enum_value(place.type),
+                    tags=place.tags,
+                    coordinates=place.coordinates,
+                    map_name=place.map_name,
+                )
+                for place in (self._uow.places.convert_to_entity(model) for model in place_models)
+            ]
 
             return ChatGPTContentData(
                 user_data=user_dto,
                 survey_data=survey_dto,
-                places_data=[],
+                places_data=places_dto,
             )
+
+    @staticmethod
+    def _enum_value(value):
+        if value is None:
+            return None
+        return value.value if hasattr(value, "value") else str(value)
 
     async def _validate_generated_route(self, route_data: dict, author_id: int) -> ChatGPTRouteData:
         try:
@@ -175,6 +186,11 @@ class ChatGPTRouteGenerateUseCase(UseCase):
                 raise Exception("Не удалось создать маршрут. Попробуйте позже.")
 
     async def _validate_places_data(self, places: List[int]) -> None:
+        if not places:
+            raise APIException(
+                code=400,
+                message="Не удалось подобрать места по вашему запросу. Уточните пожелания.",
+            )
         if not await self._uow.places.all_exist_by_id_list(places):
             logger.error(f"Some place IDs are invalid or missing in DB. Given: {places}", exc_info=True)
             raise APIException(code=500, message="Некоторые места не невалидны или не существуют.")

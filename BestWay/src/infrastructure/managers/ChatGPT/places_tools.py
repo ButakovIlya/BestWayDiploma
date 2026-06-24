@@ -8,6 +8,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 
 from config.settings import Settings
+from domain.entities.enums import CityCategory
 
 
 class OpenAIRoutePlacesTools:
@@ -43,6 +44,30 @@ class OpenAIRoutePlacesTools:
                             "description": "Optional city filter, e.g. Пермь.",
                         },
                     },
+                    "additionalProperties": False,
+                },
+            },
+            {
+                "type": "function",
+                "name": "search_places",
+                "description": "Search places by keywords in name, description, tags and map_name. Use for each user wish from prompt.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {
+                            "type": "string",
+                            "description": "Search phrase, e.g. цирк, театр, губаха.",
+                        },
+                        "city": {
+                            "anyOf": [{"type": "string"}, {"type": "null"}],
+                            "description": "Optional city filter, e.g. Пермь.",
+                        },
+                        "limit": {
+                            "anyOf": [{"type": "integer", "minimum": 1}, {"type": "null"}],
+                            "description": "Optional maximum number of rows to return.",
+                        },
+                    },
+                    "required": ["query"],
                     "additionalProperties": False,
                 },
             },
@@ -90,6 +115,12 @@ class OpenAIRoutePlacesTools:
             return self.describe_places_schema()
         if name == "get_all_places":
             return self.get_all_places(limit=arguments.get("limit"), city=arguments.get("city"))
+        if name == "search_places":
+            return self.search_places(
+                query=arguments["query"],
+                city=arguments.get("city"),
+                limit=arguments.get("limit"),
+            )
         if name == "get_places_by_ids":
             return self.get_places_by_ids(place_ids=arguments["place_ids"])
         if name == "build_ordered_route_candidates":
@@ -137,10 +168,11 @@ class OpenAIRoutePlacesTools:
             "FROM public.places"
         )
         params: list[Any] = []
+        city_values = self._city_filter_values(city)
 
-        if city:
-            sql += " WHERE city = %s"
-            params.append(city)
+        if city_values:
+            sql += " WHERE city = ANY(%s)"
+            params.append(city_values)
 
         sql += " ORDER BY 1"
 
@@ -157,6 +189,47 @@ class OpenAIRoutePlacesTools:
             "table": "public.places",
             "row_count": len(rows),
             "raw_sql": sql,
+            "city_filter": city_values,
+            "items": rows,
+        }
+
+    def search_places(
+        self,
+        query: str,
+        city: str | None = None,
+        limit: int | None = 20,
+    ) -> dict[str, Any]:
+        pattern = f"%{query.strip()}%"
+        sql = (
+            "SELECT id, name, category, type, tags, map_name, city, coordinates, description "
+            "FROM public.places "
+            "WHERE (name ILIKE %s OR COALESCE(description, '') ILIKE %s "
+            "OR COALESCE(tags, '') ILIKE %s OR COALESCE(map_name, '') ILIKE %s)"
+        )
+        params: list[Any] = [pattern, pattern, pattern, pattern]
+        city_values = self._city_filter_values(city)
+
+        if city_values:
+            sql += " AND city = ANY(%s)"
+            params.append(city_values)
+
+        sql += " ORDER BY name"
+
+        if limit is not None:
+            sql += " LIMIT %s"
+            params.append(limit)
+
+        with self._connection() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(sql, tuple(params))
+                rows = [dict(row) for row in cur.fetchall()]
+
+        return {
+            "table": "public.places",
+            "query": query,
+            "row_count": len(rows),
+            "raw_sql": sql,
+            "city_filter": city_values,
             "items": rows,
         }
 
@@ -298,6 +371,17 @@ class OpenAIRoutePlacesTools:
     @staticmethod
     def dump_tool_output(value: dict[str, Any]) -> str:
         return json.dumps(value, ensure_ascii=False, default=str)
+
+    @staticmethod
+    def _city_filter_values(city: str | None) -> list[str] | None:
+        if not city:
+            return None
+
+        for member in CityCategory:
+            if city == member.name or city == member.value:
+                return list({member.name, member.value})
+
+        return [city]
 
     @staticmethod
     def _extract_coordinates(row: dict[str, Any]) -> tuple[float, float] | None:
