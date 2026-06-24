@@ -15,6 +15,7 @@ import { mapUserProfileFromDTO } from "@/app/dashboard/account/lib/map-user-prof
 import { getProfile } from "@/app/lib/api/public/profile";
 import { useRouter } from "next/navigation";
 import Loader from "@/app/components/loader";
+import { RegistrationGuard } from "@/app/components/registration-guard";
 
 export default function Page() {
   const isMobile = useIsMobile();
@@ -50,13 +51,15 @@ export default function Page() {
   }
 
   return (
-    <div
-      className={clsx(
-        styles["form__centered"],
-        !isMobile && styles["form__desktop"],
-      )}
-    >
-      <RegistrationForm />
-    </div>
+    <RegistrationGuard>
+      <div
+        className={clsx(
+          styles["form__centered"],
+          !isMobile && styles["form__desktop"],
+        )}
+      >
+        <RegistrationForm />
+      </div>
+    </RegistrationGuard>
   );
 }

@@ -14,25 +14,25 @@ import {
   InputOTPSlot,
 } from "@/app/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
-import { useActionState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CodeSchema } from "../../types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CODE_SCHEMA } from "../../lib/constants/code-schema";
-import { useSearchParams } from "next/navigation";
-import { authenticate } from "@/app/lib/actions";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/app/components/ui/input";
+import { loginWithCode } from "@/app/lib/auth/auth-service";
+import { getIsNewUser } from "@/app/lib/auth/token-storage";
 
 import styles from "./code-form.module.css";
 import { useAppStore } from "@/app/_store/app-store";
 
 export default function CodeForm() {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
-  const [errorMessage, formAction, isPending] = useActionState(
-    authenticate,
-    undefined,
-  );
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard/feed";
+  const [errorMessage, setErrorMessage] = useState<string>();
+  const [isPending, setIsPending] = useState(false);
 
   const { login } = useAppStore((state) => state);
   const { isSentCode, setIsSentCode, phone } = login;
@@ -51,6 +51,26 @@ export default function CodeForm() {
     }
   }, [form, isPending]);
 
+  async function handleSubmit(values: CodeSchema) {
+    setErrorMessage(undefined);
+    setIsPending(true);
+
+    const result = await loginWithCode(phone, values.code);
+
+    if (!result.ok) {
+      setErrorMessage(result.error);
+      setIsPending(false);
+      return;
+    }
+
+    if (getIsNewUser()) {
+      router.push("/login/registration");
+      return;
+    }
+
+    router.push(callbackUrl);
+  }
+
   return (
     <>
       <Button
@@ -63,13 +83,16 @@ export default function CodeForm() {
       </Button>
       <div>
         <Form {...form}>
-          <form action={formAction} className="text-center">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="text-center"
+          >
             <FormField
               name="phone"
               render={() => (
                 <FormItem className="hidden">
                   <FormControl>
-                    <Input name="phone" defaultValue={phone} />
+                    <Input name="phone" defaultValue={phone} readOnly />
                   </FormControl>
                 </FormItem>
               )}
@@ -106,7 +129,6 @@ export default function CodeForm() {
                 </FormItem>
               )}
             />
-            <input type="hidden" name="redirectTo" value={callbackUrl} />
             <Button ref={buttonRef} type="submit" className="hidden" />
             <div
               className="flex h-8 items-end space-x-1"
@@ -114,9 +136,7 @@ export default function CodeForm() {
               aria-atomic="true"
             >
               {errorMessage && (
-                <>
-                  <p className="text-sm text-red-500">{errorMessage}</p>
-                </>
+                <p className="text-sm text-red-500">{errorMessage}</p>
               )}
             </div>
           </form>

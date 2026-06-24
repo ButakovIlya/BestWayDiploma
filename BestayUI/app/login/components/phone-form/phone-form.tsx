@@ -19,6 +19,7 @@ import { PHONE_SCHEMA } from "../../lib/constants/phone-schema";
 import { toast } from "sonner";
 import { useAppStore } from "@/app/_store/app-store";
 import Link from "next/link";
+import { sendAuthCode } from "@/app/lib/api/public/auth";
 
 export default function PhoneForm() {
   const { login } = useAppStore((state) => state);
@@ -37,19 +38,18 @@ export default function PhoneForm() {
     increaseSentTimes();
     setIsLoading(true);
 
-    fetch(
-      "/api/public/auth/send-code?" +
-        new URLSearchParams({
-          phone,
-        }).toString(),
-    )
-      .then((res) => res.json())
+    sendAuthCode(phone)
       .then((data) => {
         toast(`Код для номера ${phone}`, {
           description: data.message,
           duration: 5000,
         });
         setIsSentCode(true);
+      })
+      .catch(() => {
+        toast.error("Не удалось отправить код");
+      })
+      .finally(() => {
         setIsLoading(false);
       });
   }

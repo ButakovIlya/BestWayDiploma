@@ -1,7 +1,6 @@
 "use client";
 import styles from "./layout.module.css";
 import { DashboardSidebar } from "./components/dashboard-sidebar";
-// написать свою реализацию
 import { SidebarProvider } from "../components/ui/sidebar";
 import { SidebarTrigger } from "./components/sidebar-trigger/sidebar-trigger";
 import { Toaster } from "../components/ui/sonner";
@@ -22,6 +21,8 @@ import Loader from "../components/loader";
 import Script from "next/script";
 import { RouteRead } from "../types/entities";
 import { Button } from "../components/ui/button";
+import { AuthGuard } from "../components/auth-guard";
+import { updateAuthProfileMeta } from "../lib/auth/token-storage";
 
 export default function Layout(props: React.PropsWithChildren) {
   const { children } = props;
@@ -39,22 +40,30 @@ export default function Layout(props: React.PropsWithChildren) {
   };
 
   useEffect(() => {
-    getProfile().then((data) => {
-      const profile = mapUserProfileFromDTO(data);
-      setUser(profile);
+    getProfile()
+      .then((data) => {
+        const profile = mapUserProfileFromDTO(data);
+        setUser(profile);
+        updateAuthProfileMeta({
+          isAdmin: profile.isAdmin,
+          userId: profile.id,
+        });
 
-      if (
-        checkIsUserRegistrated(profile.registrationDate) &&
-        !checkIsUserFioFilled(profile)
-      ) {
-        router.push("/login/registration");
-        return;
-      }
+        if (
+          checkIsUserRegistrated(profile.registrationDate) &&
+          !checkIsUserFioFilled(profile)
+        ) {
+          router.push("/login/registration");
+          return;
+        }
 
-      setIsNewUser(false);
-      setChannelName(`personal-${profile.id}`);
-    });
-  }, []);
+        setIsNewUser(false);
+        setChannelName(`personal-${profile.id}`);
+      })
+      .catch(() => {
+        router.push("/login");
+      });
+  }, [router, setUser]);
 
   useEffect(() => {
     if (channelName.length) {
@@ -106,36 +115,40 @@ export default function Layout(props: React.PropsWithChildren) {
 
   if (typeof isNewUser !== "boolean") {
     return (
-      <div className="h-full w-full  flex justify-center items-center">
-        <Loader />
-      </div>
+      <AuthGuard>
+        <div className="flex h-full w-full items-center justify-center">
+          <Loader />
+        </div>
+      </AuthGuard>
     );
   }
 
   return (
-    <>
-      <Script
-        src={`https://api-maps.yandex.ru/2.1/?apikey=${process.env.NEXT_PUBLIC_YANDEX_MAP_KEY}&lang=ru_RU`}
-        strategy="afterInteractive"
-      />
-      <div className={styles.layout}>
-        <SidebarProvider defaultOpen={isSidebarOpened}>
-          <DashboardSidebar />
-          <div className={styles["layout__trigger-wrapper"]}>
-            <SidebarTrigger />
-          </div>
-          <div
-            className={cn(
-              isMobile
-                ? styles["layout__children--mobile"]
-                : styles["layout__children--desktop"],
-            )}
-          >
-            <div className={styles["layout__content-card"]}>{children}</div>
-          </div>
-        </SidebarProvider>
-        <Toaster theme="light" />
-      </div>
-    </>
+    <AuthGuard>
+      <>
+        <Script
+          src={`https://api-maps.yandex.ru/2.1/?apikey=${process.env.NEXT_PUBLIC_YANDEX_MAP_KEY}&lang=ru_RU`}
+          strategy="afterInteractive"
+        />
+        <div className={styles.layout}>
+          <SidebarProvider defaultOpen={isSidebarOpened}>
+            <DashboardSidebar />
+            <div className={styles["layout__trigger-wrapper"]}>
+              <SidebarTrigger />
+            </div>
+            <div
+              className={cn(
+                isMobile
+                  ? styles["layout__children--mobile"]
+                  : styles["layout__children--desktop"],
+              )}
+            >
+              <div className={styles["layout__content-card"]}>{children}</div>
+            </div>
+          </SidebarProvider>
+          <Toaster theme="light" />
+        </div>
+      </>
+    </AuthGuard>
   );
 }

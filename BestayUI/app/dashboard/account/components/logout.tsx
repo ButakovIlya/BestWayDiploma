@@ -1,19 +1,14 @@
+"use client";
+
 import { Button } from "@/app/components/ui/button";
-import { signOut } from "@/auth";
+import { logout } from "@/app/lib/auth/auth-service";
 import { LogOut } from "lucide-react";
 
-export async function Logout() {
+export function Logout() {
   return (
-    <form
-      action={async () => {
-        "use server";
-        await signOut({ redirectTo: "/" });
-      }}
-    >
-      <Button variant="destructive">
-        <LogOut />
-        Выйти из аккаунта
-      </Button>
-    </form>
+    <Button variant="destructive" onClick={logout}>
+      <LogOut />
+      Выйти из аккаунта
+    </Button>
   );
 }
