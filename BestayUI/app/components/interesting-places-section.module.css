@@ -25,6 +25,11 @@
   border-radius: 60px;
   height: 500px;
   padding: 25px 0;
+  transition: box-shadow 0.35s ease;
+}
+
+.section-inner:hover {
+  box-shadow: 0 18px 50px rgba(0, 96, 150, 0.1);
 }
 
 .section-inner > div:first-child {
@@ -40,6 +45,10 @@
   gap: 25px;
   overflow-x: auto;
   padding-bottom: 5px;
+}
+
+.routes-container > div {
+  flex: 0 0 auto;
 }
 
 .routes-container::-webkit-scrollbar {
@@ -63,6 +72,14 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.route-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 22px 50px rgba(0, 96, 150, 0.18);
 }
 
 .route-card > div:first-child {
@@ -139,4 +156,10 @@
   padding: 5px;
   background-color: #ffffff;
   border-radius: 50%;
+  transition: transform 0.25s ease, background-color 0.25s ease;
+}
+
+.route-card:hover .pill-button {
+  transform: scale(1.1);
+  background-color: #eaf5ff;
 }

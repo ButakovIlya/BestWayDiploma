@@ -1,4 +1,5 @@
 import { Backpack, Building2, Heart } from "lucide-react";
+import { Reveal } from "./reveal";
 import styles from "./use-cases-section.module.css";
 
 const USE_CASES = [
@@ -23,24 +24,28 @@ export function UseCasesSection() {
   return (
     <section className={styles["section-container"]}>
       <div className={styles["section-inner"]}>
-        <div className={styles["section-header"]}>
-          <h2>Кому подойдёт сервис</h2>
-          <p>
-            BestWay одинаково удобен и для первого визита в город, и для тех,
-            кто хочет увидеть привычные места с новой стороны.
-          </p>
-        </div>
+        <Reveal>
+          <div className={styles["section-header"]}>
+            <h2>Кому подойдёт сервис</h2>
+            <p>
+              BestWay одинаково удобен и для первого визита в город, и для тех,
+              кто хочет увидеть привычные места с новой стороны.
+            </p>
+          </div>
+        </Reveal>
         <div className={styles["cases-grid"]}>
-          {USE_CASES.map(({ icon: Icon, title, text }) => (
-            <article key={title} className={styles["case-card"]}>
-              <div className={styles["case-icon"]}>
-                <Icon color="#006096" />
-              </div>
-              <div>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </div>
-            </article>
+          {USE_CASES.map(({ icon: Icon, title, text }, index) => (
+            <Reveal key={title} delay={index * 120} variant="up">
+              <article className={styles["case-card"]}>
+                <div className={styles["case-icon"]}>
+                  <Icon color="#006096" />
+                </div>
+                <div>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                </div>
+              </article>
+            </Reveal>
           ))}
         </div>
       </div>

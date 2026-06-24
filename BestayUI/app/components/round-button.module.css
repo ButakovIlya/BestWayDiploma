@@ -8,10 +8,21 @@
     rgba(232, 232, 232, 0.907),
     rgba(255, 255, 255, 0.536)
   );
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .button:hover {
   cursor: pointer;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  border-color: #006096;
+}
+
+.button:active {
+  transform: translateY(0);
 }
 
 @media (max-width: 750px) {

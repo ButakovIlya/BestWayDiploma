@@ -13,14 +13,18 @@
     rgba(234, 234, 234, 0.817),
     rgba(255, 255, 255, 0.536)
   );
+  animation: landingFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .banner {
   width: 175px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
 .banner:hover {
   cursor: pointer;
+  transform: scale(1.03);
+  opacity: 0.9;
 }
 
 @media (max-width: 1200px) {

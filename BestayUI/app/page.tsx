@@ -6,6 +6,7 @@ import { MainSection } from "./components/main-section";
 import { FeaturesSection } from "./components/features-section";
 import { UseCasesSection } from "./components/use-cases-section";
 import { CtaSection } from "./components/cta-section";
+import "./landing-motion.css";
 
 export default function Page() {
   return (

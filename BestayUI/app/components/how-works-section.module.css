@@ -22,14 +22,24 @@
   gap: 3rem;
 }
 
+.steps-container > div {
+  width: 100%;
+}
+
 .step-content {
   display: flex;
   flex-direction: row;
   gap: 40px;
   align-items: center;
+  transition: transform 0.25s ease;
 }
 
-.step-content > div:first-child {
+.step-content:hover {
+  transform: translateX(6px);
+}
+
+.step-content > div:first-child,
+.step-icon {
   min-width: 3rem;
   min-height: 3rem;
   background-color: #eaeaef;
@@ -38,6 +48,12 @@
   justify-content: center;
   align-items: center;
   padding: 5px;
+  transition: transform 0.25s ease, background-color 0.25s ease;
+}
+
+.step-content:hover .step-icon {
+  transform: scale(1.06);
+  background-color: #ffffff;
 }
 
 .step-text {

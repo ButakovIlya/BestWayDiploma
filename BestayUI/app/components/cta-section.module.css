@@ -17,6 +17,19 @@
   align-items: center;
   justify-content: space-between;
   gap: 32px;
+  background-size: 200% 200%;
+  animation: ctaGradientShift 8s ease infinite;
+}
+
+@keyframes ctaGradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .cta-label {
@@ -55,7 +68,10 @@
   padding: 14px 22px;
   font-weight: 600;
   text-align: center;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .cta-primary {
@@ -71,8 +87,13 @@
 
 .cta-primary:hover,
 .cta-secondary:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px) scale(1.02);
   opacity: 0.95;
+}
+
+.cta-primary:active,
+.cta-secondary:active {
+  transform: translateY(0) scale(0.98);
 }
 
 @media (max-width: 900px) {

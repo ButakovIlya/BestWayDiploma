@@ -1,11 +1,14 @@
+"use client";
+
 import fsiLogo from "@/public/fsi-logo.svg";
 import Image from "next/image";
+import { Reveal } from "./reveal";
 import styles from "./footer.module.css";
 
 export function Footer() {
   return (
     <footer className={styles["footer-container"]}>
-      <div className={styles["footer-content"]}>
+      <Reveal variant="fade" className={styles["footer-content"]}>
         <p>© 2026 BestWay</p>
         <div className={styles["info-container"]}>
           <div className={styles["fsi-container"]}>
@@ -35,7 +38,7 @@ export function Footer() {
             </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </footer>
   );
 }
