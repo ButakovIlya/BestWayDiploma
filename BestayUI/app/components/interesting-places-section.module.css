@@ -10,6 +10,13 @@
   align-self: center;
 }
 
+.title-description {
+  color: #5e6282;
+  max-width: 720px;
+  line-height: 1.6;
+  margin-top: 8px;
+}
+
 .section-inner {
   display: flex;
   flex-direction: column;

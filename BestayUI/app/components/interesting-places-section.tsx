@@ -12,6 +12,10 @@ export function InterestingPlacesSection() {
     <div className={styles["section-container"]}>
       <div className={styles["title"]}>
         <h2>Интересные маршруты</h2>
+        <p className={styles["title-description"]}>
+          Подборки прогулок по Перми и области — от кофеен и набережной до
+          культурных мест и горных маршрутов.
+        </p>
       </div>
       <div className={styles["section-inner"]}>
         <div>

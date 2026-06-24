@@ -8,6 +8,13 @@
   width: 80%;
 }
 
+.section-intro {
+  color: #5e6282;
+  max-width: 640px;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
 .steps-container {
   width: 50%;
   display: flex;

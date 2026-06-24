@@ -6,6 +6,10 @@ export function HowWorksSection() {
     <div className={styles["section-container"]}>
       <div className={styles["section-inner"]}>
         <h2>Как работает AI помощник-путеводитель?</h2>
+        <p className={styles["section-intro"]}>
+          Всего три шага — от вашего запроса до готового маршрута с точками на
+          карте и возможностью редактирования.
+        </p>
         <div className={styles["steps-container"]}>
           <div className={styles["step-content"]}>
             <div>
