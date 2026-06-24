@@ -5,33 +5,46 @@ import { z } from "zod";
 import { UserDTO } from "./app/types/entities";
 
 async function getUser(phone: string, code: string): Promise<User | undefined> {
+  const backendApiUrl = process.env.BACKEND_API_URL;
+  if (!backendApiUrl) {
+    console.error("BACKEND_API_URL is not configured.");
+    return undefined;
+  }
+
   try {
-    const res = await fetch(
-      process.env.BACKEND_API_URL + "/public/auth/check-code",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          phone,
-          code,
-        }),
-        headers: { "Content-Type": "application/json" },
-      },
-    );
+    const res = await fetch(`${backendApiUrl}/public/auth/check-code`, {
+      method: "POST",
+      body: JSON.stringify({
+        phone,
+        code,
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!res.ok) {
+      console.error("Backend check-code failed:", res.status, await res.text());
+      return undefined;
+    }
 
     const data = await res.json();
 
     return data;
   } catch (error) {
     console.error("Failed to fetch user:", error);
-    throw new Error("Failed to fetch user.");
+    return undefined;
   }
 }
 
 async function getUserProfile(
   access_token: string,
 ): Promise<UserDTO | undefined> {
+  const backendApiUrl = process.env.BACKEND_API_URL;
+  if (!backendApiUrl || !access_token) {
+    return undefined;
+  }
+
   try {
-    const res = await fetch(process.env.BACKEND_API_URL + "/public/profile", {
+    const res = await fetch(`${backendApiUrl}/public/profile`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -39,12 +52,17 @@ async function getUserProfile(
       },
     });
 
+    if (!res.ok) {
+      console.error("Backend profile request failed:", res.status, await res.text());
+      return undefined;
+    }
+
     const data = await res.json();
 
     return data;
   } catch (error) {
     console.error("Failed to fetch user profile:", error);
-    throw new Error("Failed to fetch user profile.");
+    return undefined;
   }
 }
 
