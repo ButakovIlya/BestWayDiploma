@@ -8,26 +8,20 @@ import httpx
 
 from openai import OpenAI
 
-from application.use_cases.routes.enums import RouteGenerationMode as Mode
 from common.exceptions import APIException, ResponsesLimitExceededException
 from config.settings import Settings
-from infrastructure.managers.ChatGPT.constants import (
-    FULL_MODE_PROMPT,
-    GENERATED_ROUTE_RESPONSE_FORMAT,
-    PARTIAL_MODE_PROMPT,
-)
 from infrastructure.managers.ChatGPT.dto import ChatGPTContentData
-from infrastructure.managers.ChatGPT.places_tools import OpenAIRoutePlacesTools
 from infrastructure.managers.ChatGPT.utils import retry_on_status_code
 from infrastructure.managers.proxy_client import ProxyClient
 from infrastructure.repositories.interfaces.ChatGPT.base import ClassificationManager
+from application.use_cases.routes.enums import RouteGenerationMode as Mode
 
 logger = logging.getLogger(__name__)
 
 
 class BaseClassificationManager(ClassificationManager):
     """
-    Базовый класс для работы с OpenAI Responses API и локальными route tools.
+    Базовый класс для работы с OpenAI Responses API через prompt object.
     """
 
     settings = Settings()
@@ -36,6 +30,12 @@ class BaseClassificationManager(ClassificationManager):
     CHATGPT_REQUEST_DELAY = settings.chatgpt.request_delay
     CHATGPT_MAX_REQUEST_RETRIES = settings.chatgpt.max_request_retries
     MAX_RESPONSES_PER_DAY = settings.chatgpt.max_responses_per_day
+
+    CHATGPT_FULL_PROMPT_ID = settings.chatgpt.full_mode_prompt_id
+    CHATGPT_FULL_PROMPT_VERSION = settings.chatgpt.full_mode_prompt_version
+
+    CHATGPT_PARTIAL_PROMPT_ID = settings.chatgpt.partial_mode_prompt_id
+    CHATGPT_PARTIAL_PROMPT_VERSION = settings.chatgpt.partial_mode_prompt_version
 
     def __init__(self):
         self.proxy_client = ProxyClient(
@@ -47,7 +47,6 @@ class BaseClassificationManager(ClassificationManager):
         self.proxy_openai_client = OpenAI(
             api_key=self.settings.chatgpt.api_key, http_client=self.proxy_client.client
         )
-        self.route_places_tools = OpenAIRoutePlacesTools(self.settings)
 
         self.responses_count = 0
         self.last_response_date = None
@@ -89,7 +88,7 @@ class BaseClassificationManager(ClassificationManager):
             )
             raise ResponsesLimitExceededException()
 
-    def _build_route_payload(
+    def _build_prompt_variables(
         self,
         content: ChatGPTContentData,
         mode: Mode = Mode.FULL,
@@ -101,9 +100,6 @@ class BaseClassificationManager(ClassificationManager):
 
         if mode == Mode.FULL:
             return {
-                "user_data": user_data,
-                "survey_data": survey_data,
-                "city": survey_data.get("city") or "",
                 "prompt": survey_data.get("prompt") or "",
             }
 
@@ -118,8 +114,6 @@ class BaseClassificationManager(ClassificationManager):
                 },
                 ensure_ascii=False,
             ),
-            "user_data": user_data,
-            "survey_data": survey_data,
         }
 
     def _parse_chatgpt_response(self, response) -> dict[str, Any]:
@@ -160,94 +154,26 @@ class BaseClassificationManager(ClassificationManager):
 
     def _create_request_kwargs(self, content: ChatGPTContentData, mode: Mode = Mode.FULL) -> dict[str, Any]:
         """
-        Формирует параметры запроса для Responses API с локальными tools мест.
+        Формирует параметры запроса для Responses API через prompt object.
         """
-        prompt = FULL_MODE_PROMPT if mode == Mode.FULL else PARTIAL_MODE_PROMPT
+        PROMPT_ID = self.CHATGPT_FULL_PROMPT_ID if mode == Mode.FULL else self.CHATGPT_PARTIAL_PROMPT_ID
+        PROMPT_VERSION = self.CHATGPT_FULL_PROMPT_VERSION if mode == Mode.FULL else self.CHATGPT_PARTIAL_PROMPT_VERSION
+        logger.info(f"_send_response to ChatGPT with prompt_id: {PROMPT_ID}")
         kwargs: dict[str, Any] = {
             "model": self.CHATGPT_MODEL,
-            "input": [
-                {
-                    "role": "developer",
-                    "content": prompt,
-                },
-                {
-                    "role": "user",
-                    "content": json.dumps(
-                        self._build_route_payload(content, mode),
-                        ensure_ascii=False,
-                        default=str,
-                    ),
-                },
-            ],
-            "tools": self.route_places_tools.definitions,
-            "tool_choice": "auto",
-            "text": {
-                "format": GENERATED_ROUTE_RESPONSE_FORMAT,
+            "input": "",
+            "prompt": {
+                "id": PROMPT_ID,
+                "variables": self._build_prompt_variables(content, mode),
             },
             "max_output_tokens": 60000,
             "truncation": "auto",
         }
+
+        if PROMPT_VERSION:
+            kwargs["prompt"]["version"] = str(PROMPT_VERSION)
 
         return kwargs
-
-    def _extract_tool_calls(self, response) -> list[dict[str, Any]]:
-        tool_calls = []
-        for item in getattr(response, "output", []) or []:
-            item_type = getattr(item, "type", None)
-            if item_type is None and isinstance(item, dict):
-                item_type = item.get("type")
-
-            if item_type != "function_call":
-                continue
-
-            name = getattr(item, "name", None) if not isinstance(item, dict) else item.get("name")
-            call_id = getattr(item, "call_id", None) if not isinstance(item, dict) else item.get("call_id")
-            raw_arguments = (
-                getattr(item, "arguments", "{}") if not isinstance(item, dict) else item.get("arguments", "{}")
-            )
-
-            if isinstance(raw_arguments, str):
-                arguments = json.loads(raw_arguments or "{}")
-            else:
-                arguments = raw_arguments or {}
-
-            tool_calls.append(
-                {
-                    "name": name,
-                    "call_id": call_id,
-                    "arguments": arguments,
-                }
-            )
-
-        return tool_calls
-
-    def _run_tool_calls(self, response) -> list[dict[str, Any]]:
-        tool_outputs = []
-        for tool_call in self._extract_tool_calls(response):
-            result = self.route_places_tools.call(tool_call["name"], tool_call["arguments"])
-            tool_outputs.append(
-                {
-                    "type": "function_call_output",
-                    "call_id": tool_call["call_id"],
-                    "output": self.route_places_tools.dump_tool_output(result),
-                }
-            )
-
-        return tool_outputs
-
-    def _create_tool_followup_kwargs(self, response, tool_outputs: list[dict[str, Any]]) -> dict[str, Any]:
-        return {
-            "model": self.CHATGPT_MODEL,
-            "previous_response_id": response.id,
-            "input": tool_outputs,
-            "tools": self.route_places_tools.definitions,
-            "tool_choice": "auto",
-            "text": {
-                "format": GENERATED_ROUTE_RESPONSE_FORMAT,
-            },
-            "max_output_tokens": 60000,
-            "truncation": "auto",
-        }
 
     @retry_on_status_code(
         code=429,
@@ -256,7 +182,7 @@ class BaseClassificationManager(ClassificationManager):
     )
     def _send_request(self, content: ChatGPTContentData, mode: Mode = Mode.FULL) -> dict[str, Any]:
         """
-        Делает запрос в OpenAI через SDK и выполняет локальные tool calls.
+        Делает запрос в OpenAI через SDK и prompt object.
         """
         self._check_response_availability()
         sleep(self.CHATGPT_REQUEST_DELAY)
@@ -265,15 +191,6 @@ class BaseClassificationManager(ClassificationManager):
 
         try:
             response = self.proxy_openai_client.responses.create(**kwargs)
-            for _ in range(10):
-                tool_outputs = self._run_tool_calls(response)
-                if not tool_outputs:
-                    return self._parse_chatgpt_response(response)
-
-                response = self.proxy_openai_client.responses.create(
-                    **self._create_tool_followup_kwargs(response, tool_outputs)
-                )
-
             return self._parse_chatgpt_response(response)
 
         except httpx.ReadTimeout as ex:

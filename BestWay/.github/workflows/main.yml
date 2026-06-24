@@ -1,0 +1,106 @@
+name: Deploy Docker Container to Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy project files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASS }}
+          port: 22
+          source: "."  # копируем весь проект
+          target: "/home/bestway-app"
+
+      - name: Run docker-compose on server
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASS }}
+          port: 22
+          script: |
+            cd /home/bestway-app
+
+            echo "📦 Создаём .env"
+            cat <<EOF > .env
+            PYTHONPATH=${{ secrets.PYTHONPATH }}
+            PYTHONUNBUFFERED=${{ secrets.PYTHONUNBUFFERED }}
+            CELERY_APP_NAME=${{ secrets.CELERY_APP_NAME }}
+            CELERY_BROKER_URL=${{ secrets.CELERY_BROKER_URL }}
+            CELERY_RESULT_BACKEND=${{ secrets.CELERY_RESULT_BACKEND }}
+
+            APP__NAME=${{ secrets.APP__NAME }}
+            APP__BASE_URL=${{ secrets.APP__BASE_URL }}
+            APP__DEBUG=${{ secrets.APP__DEBUG }}
+
+            UPTRACE__ENABLED=False
+            UPTRACE__DSN=
+
+            REDIS__HOST=redis://redis:6379/2
+            REDIS__PASSWORD=
+
+            TASK__APP_NAME=bestway
+            TASK__BROKER_URL=redis://redis:6379/0
+            TASK__RESULT_URL=redis://redis:6379/1
+
+            DB__NAME=${{ secrets.DB__NAME }}
+            DB__USER=${{ secrets.DB__USER }}
+            DB__PASSWORD=${{ secrets.DB__PASSWORD }}
+            DB__HOST=${{ secrets.DB__HOST }}
+            DB__PORT=${{ secrets.DB__PORT }}
+            DB__POOL_SIZE=2
+            DB__MAX_OVERFLOW=4
+
+            UVICORN_HOST=0.0.0.0
+            UVICORN_PORT=8000
+            UVICORN_WORKERS=4
+            UVICORN_RELOAD=false
+            UVICORN_TIMEOUT_KEEP_ALIVE=5
+
+            JWT__SECRET_KEY=${{ secrets.JWT__SECRET_KEY }}
+            JWT__ALGORITHM=${{ secrets.JWT__ALGORITHM }}
+
+            SMS__SERVICE_URL=${{ secrets.SMS__SERVICE_URL }}
+            SMS__API_KEY=${{ secrets.SMS__API_KEY }}
+            SMS__CACHE_TIMEOUT=300
+
+            PUSHER__APP_ID=${{ secrets.PUSHER__APP_ID }}
+            PUSHER__KEY=${{ secrets.PUSHER__KEY }}
+            PUSHER__SECRET=${{ secrets.PUSHER__SECRET }}
+
+            PROXY__HOST=${{ secrets.PROXY__HOST }}
+            PROXY__HTTP_PORT=${{ secrets.PROXY__HTTP_PORT }}
+            PROXY__SOCKS5_PORT=${{ secrets.PROXY__SOCKS5_PORT }}
+            PROXY__USERNAME=${{ secrets.PROXY__USERNAME }}
+            PROXY__PASSWORD=${{ secrets.PROXY__PASSWORD }}
+
+            CHATGPT__API_KEY=${{ secrets.CHATGPT__API_KEY }}
+            CHATGPT__FULL_MODE_PROMPT_ID=${{ secrets.CHATGPT__FULL_MODE_PROMPT_ID }}
+            CHATGPT__PARTIAL_MODE_PROMPT_ID=${{ secrets.CHATGPT__PARTIAL_MODE_PROMPT_ID }}
+            EOF
+
+            echo "📦 Создаём .env.db"
+            cat <<EOF > .env.db
+            POSTGRES_DB=${{ secrets.DB_NAME }}
+            POSTGRES_USER=${{ secrets.DB_USER }}
+            POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }}
+            EOF
+
+            echo "🧹 Останавливаем старые контейнеры (если есть)..."
+            docker compose down
+
+            echo "🚀 Собираем и запускаем новые контейнеры..."
+            docker compose up -d --build
+
+            echo "✅ Готово!"
