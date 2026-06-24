@@ -2,16 +2,18 @@
   margin-bottom: 10px;
   margin-left: -10px;
   z-index: 999;
-  height: 25px;
-  width: 25px;
+  height: 32px;
+  width: 32px;
+  border-radius: 9999px;
+  box-shadow: 0 8px 24px rgba(0, 96, 150, 0.12);
 }
 
 .dashboard-sidebar__trigger--desktop--opened {
-  left: 240px;
+  left: calc(var(--bw-sidebar-width) + 8px);
 }
 
 .dashboard-sidebar__trigger--desktop--closed {
-  left: 40px;
+  left: calc(var(--bw-sidebar-width-icon) - 4px);
 }
 
 .dashboard-sidebar__trigger--mobile--opened {

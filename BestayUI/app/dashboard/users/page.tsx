@@ -5,7 +5,7 @@ import { columns } from "./lib/constants/columns";
 import { useEffect, useState } from "react";
 import { mapUsersFromDTO } from "./lib/map-users-from-dto";
 import { editUser, getUsers, removeUser } from "@/app/lib/api/admin/users";
-import styles from "./page.module.css";
+import adminStyles from "../lib/styles/admin-page.module.css";
 import { Actions } from "@/app/types";
 import { User, UserForm } from "./types";
 import { Edit, Eye, Lock, Trash2 } from "lucide-react";
@@ -131,10 +131,14 @@ export default function Page() {
   }, [pagination]);
 
   return (
-    <div className={styles.page}>
-      <DashboardHeader title="Пользователи платформы" />
+    <div className={adminStyles.page}>
+      <DashboardHeader
+        badge="Админ"
+        title="Пользователи"
+        subtitle="Управление аккаунтами, ролями администратора и блокировками пользователей платформы."
+      />
       <DataTable
-        containerClassname={styles["table-container"]}
+        containerClassname={adminStyles["table-container"]}
         columns={columns}
         data={users}
         actions={actions}

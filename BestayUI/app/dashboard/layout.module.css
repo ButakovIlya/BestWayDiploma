@@ -7,9 +7,10 @@
 }
 
 .layout__children--desktop {
-  width: calc(100vw - 48px);
+  width: calc(100vw - var(--bw-sidebar-width-icon));
   min-height: 100dvh;
-  padding: 22px 24px 24px;
+  padding: 20px 24px 24px 12px;
+  transition: width 0.2s ease;
 }
 
 .layout__children--mobile {
@@ -27,13 +28,15 @@
 }
 
 .layout__content-card {
-  min-height: calc(100dvh - 48px);
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - 44px);
   border: 1px solid rgba(0, 96, 150, 0.1);
   border-radius: var(--bw-card-radius);
   background: rgba(255, 255, 255, 0.82);
   box-shadow: var(--bw-shadow);
   backdrop-filter: blur(18px);
-  padding: 24px;
+  padding: 28px;
   overflow: hidden;
 }
 

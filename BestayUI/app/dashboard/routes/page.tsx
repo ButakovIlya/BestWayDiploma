@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/app/components/ui/button";
 import DashboardHeader from "../components/dashboard-header/dashboard-header";
-import styles from "./page.module.css";
+import adminStyles from "../lib/styles/admin-page.module.css";
 import { useEffect, useState } from "react";
 import { Route } from "./types";
 import { DataTable } from "@/app/components/table/data-table";
@@ -122,9 +122,11 @@ export default function Page() {
   }, [pagination]);
 
   return (
-    <div className={styles.page}>
+    <div className={adminStyles.page}>
       <DashboardHeader
-        title="База знаний маршрутов"
+        badge="Админ"
+        title="Маршруты"
+        subtitle="Шаблоны и публичные маршруты платформы. Редактируйте состав точек и метаданные."
         rightChild={
           <Button
             onClick={() => {
@@ -133,12 +135,12 @@ export default function Page() {
             }}
           >
             <Plus />
-            Создать запись
+            Добавить маршрут
           </Button>
         }
       />
       <DataTable
-        containerClassname={styles["table-container"]}
+        containerClassname={adminStyles["table-container"]}
         columns={columns}
         data={routes}
         actions={actions}

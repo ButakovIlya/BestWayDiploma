@@ -27,6 +27,7 @@ import { PaginationBar } from "./pagination-bar";
 import { FilterPanel } from "./filter-panel";
 import { Loading } from "./loading";
 import clsx from "clsx";
+import { Inbox } from "lucide-react";
 
 interface DataTableProps<TData, TValue>
   extends React.HTMLAttributes<HTMLTableElement> {
@@ -62,12 +63,14 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
   const actionColumn: ColumnDef<TData, TValue> | null = actions
     ? {
         id: "actions",
+        header: "Действия",
         cell: ({ row }) => {
           if (actions.length === 1) {
             const { title, onClick, disabled } = actions[0];
             return (
               <Button
                 variant="outline"
+                size="sm"
                 onClick={() => {
                   onClick(row);
                 }}
@@ -102,26 +105,34 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
     rowCount,
   });
 
+  const totalPages =
+    pagination && rowCount
+      ? Math.max(1, Math.ceil(rowCount / pagination.pageSize))
+      : undefined;
+
   return (
-    <>
+    <div className="flex min-h-0 flex-1 flex-col gap-3">
       {columnFilters && filterConfig && (
         <FilterPanel filterColumns={filterConfig} getColumn={table.getColumn} />
       )}
       <Table
         containerClassname={cn(
           containerClassname,
-          "h-[80vh] overflow-auto rounded-[28px] border border-[#0060961f] bg-white/90 shadow-[0_18px_55px_rgba(0,96,150,0.08)]",
+          "min-h-[320px] flex-1 overflow-auto rounded-[28px] border border-[#0060961f] bg-white/92 shadow-[0_18px_55px_rgba(0,96,150,0.08)]",
         )}
         className={cn(
           className,
-          "w-full h-full overflow-clip relative border-separate border-spacing-0",
+          "relative h-full w-full overflow-clip border-separate border-spacing-0",
         )}
       >
-        <TableHeader className="sticky top-[-1] bg-[#eaf5ff]/95 backdrop-blur z-10">
+        <TableHeader className="sticky top-[-1] z-10 bg-[#eaf5ff]/95 backdrop-blur">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id} className="h-12 px-4 font-bold text-[#123047]">
+                <TableHead
+                  key={header.id}
+                  className="h-14 px-5 text-sm font-bold tracking-wide text-[#123047]"
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -145,14 +156,15 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                className="transition-colors hover:bg-[#f5fbff]"
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
                     key={cell.id}
                     className={clsx(
-                      "px-4 py-3",
+                      "px-5 py-4 text-[15px] leading-relaxed text-[#1f3344]",
                       cell.id.includes("actions") &&
-                        "sticky right-0 z-0 bg-white/85 backdrop-blur",
+                        "sticky right-0 z-0 bg-white/90 backdrop-blur",
                     )}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -162,8 +174,17 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                Нет результатов.
+              <TableCell
+                colSpan={columns.length + (actions ? 1 : 0)}
+                className="h-40 text-center"
+              >
+                <div className="flex flex-col items-center justify-center gap-3 text-[#4a6278]">
+                  <Inbox className="opacity-50" size={28} />
+                  <span className="text-base font-medium">Нет результатов</span>
+                  <span className="text-sm text-[var(--bw-muted)]">
+                    Попробуйте изменить фильтры или создайте новую запись
+                  </span>
+                </div>
               </TableCell>
             </TableRow>
           )}
@@ -171,11 +192,13 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
       </Table>
       <PaginationBar
         pagination={pagination}
+        rowCount={rowCount}
+        totalPages={totalPages}
         getCanNextPage={table.getCanNextPage}
         nextPage={table.nextPage}
         getCanPreviousPage={table.getCanPreviousPage}
         previousPage={table.previousPage}
       />
-    </>
+    </div>
   );
 }

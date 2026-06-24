@@ -46,6 +46,10 @@ main h2 {
   --bw-surface-blue: #eaf5ff;
   --bw-muted: #4a4a6a;
   --bw-card-radius: 32px;
+  --bw-sidebar-width: 18.5rem;
+  --bw-sidebar-width-icon: 4.25rem;
+  --bw-sidebar-width-mobile: 20rem;
+  --bw-admin-header-height: 96px;
   --bw-section-width: min(1180px, calc(100vw - 32px));
   --bw-shadow: 0 24px 80px rgba(0, 96, 150, 0.12);
   --bw-soft-shadow: 0 14px 45px rgba(19, 58, 91, 0.1);

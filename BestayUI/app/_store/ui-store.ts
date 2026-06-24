@@ -25,7 +25,7 @@ export const createUISlice: StateCreator<UIStore> = (set) => ({
     isRemoveModalOpened: false,
     isAddModalOpened: false,
     isTableDataLoading: false,
-    isSidebarOpened: false,
+    isSidebarOpened: true,
     currentPage: 0,
     setIsRecordModalOpened: (newState) =>
       set(

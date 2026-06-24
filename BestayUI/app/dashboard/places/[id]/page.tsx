@@ -16,6 +16,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import styles from "./page.module.css";
+import detailStyles from "../../lib/styles/admin-detail.module.css";
 import { ConfirmModal } from "@/app/components/confirm-modal";
 import DashboardHeader from "../../components/dashboard-header/dashboard-header";
 import { Photo } from "@/app/types";
@@ -23,10 +24,13 @@ import { PhotoCarousel } from "@/app/components/photo-carousel";
 import { correctUrl } from "@/app/lib/correct-url";
 import { PlaceFields } from "./components/place-fields";
 import { PlaceRead } from "@/app/types/entities";
+import { useAppStore } from "@/app/_store/app-store";
+import { SidebarPages } from "../../types/sidebar-pages";
 
 export default function Page() {
   const { id } = useParams<{ id: string }>();
   const [place, setPlace] = useState<PlaceRead | null>(null);
+  const setCurrentPage = useAppStore((state) => state.ui.setCurrentPage);
 
   const [modalRemoveProps, setModalRemoveProps] = useState<{
     id: number;
@@ -63,42 +67,48 @@ export default function Page() {
     });
   };
 
-  const handleRemove = (id: number) => {
-    setModalRemoveProps({ id });
+  const handleRemove = (photoId: number) => {
+    setModalRemoveProps({ id: photoId });
     setOpenRemoveModal(true);
   };
 
   useEffect(() => {
+    setCurrentPage(SidebarPages.Places);
     getPlace(Number(id)).then((data) => setPlace(data));
-  }, []);
+  }, [id, setCurrentPage]);
 
   return (
-    <>
-      <DashboardHeader title={place?.name ?? ""} />
-      <div className="page__content-container">
-        <div className={styles["page__content"]}>
-          <div className={styles["page__content__photos"]}>
-            <PhotoCarousel
-              photos={photos}
-              onUploadMain={handleUploadMain}
-              onUploadNew={handleUploadNew}
-              onRemove={handleRemove}
-            />
-          </div>
-          <div className={styles["content__fields"]}>
-            <PlaceFields place={place} />
-          </div>
+    <div className={detailStyles.detail}>
+      <DashboardHeader
+        badge="Админ"
+        title={place?.name ?? "Место"}
+        subtitle="Редактирование карточки места, фотографий и координат на карте."
+        backHref="/dashboard/places"
+      />
+      <div className={detailStyles["detail__card"]}>
+        <div className={styles["page__content__photos"]}>
+          <PhotoCarousel
+            photos={photos}
+            onUploadMain={handleUploadMain}
+            onUploadNew={handleUploadNew}
+            onRemove={handleRemove}
+          />
         </div>
-        <div>
-          <p className="font-medium text-sm">Место на карте:</p>
-          {place?.coordinates && (
+        <div className={detailStyles["detail__fields"]}>
+          <PlaceFields place={place} />
+        </div>
+      </div>
+      <div className={detailStyles["detail__section"]}>
+        <h2 className={detailStyles["detail__section-title"]}>Место на карте</h2>
+        <div className={styles["map-card"]}>
+          {place?.coordinates ? (
             <YMapPlacemark
-              style={{ width: "100%", height: "calc(100dvh - 350px)" }}
+              style={{ width: "100%", height: "420px" }}
               title={place.name}
               description={place.description ?? ""}
               placemark={place.coordinates as [number, number]}
             />
-          )}
+          ) : null}
         </div>
       </div>
       <ConfirmModal
@@ -116,6 +126,6 @@ export default function Page() {
         open={openRemoveModal}
         onOpen={setOpenRemoveModal}
       />
-    </>
+    </div>
   );
 }

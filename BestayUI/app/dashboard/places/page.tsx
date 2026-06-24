@@ -1,7 +1,7 @@
 "use client";
 import { DataTable } from "@/app/components/table/data-table";
 import { useEffect, useState } from "react";
-import styles from "./page.module.css";
+import adminStyles from "../lib/styles/admin-page.module.css";
 import { columns } from "./lib/constants/columns";
 import DashboardHeader from "../components/dashboard-header/dashboard-header";
 import { Button } from "@/app/components/ui/button";
@@ -184,9 +184,11 @@ export default function Page() {
   }, [debouncedFilters]);
 
   return (
-    <div className={styles.page}>
+    <div className={adminStyles.page}>
       <DashboardHeader
-        title="База знаний мест"
+        badge="Админ"
+        title="Места"
+        subtitle="База достопримечательностей и точек маршрутов. Создавайте, редактируйте и фильтруйте записи."
         rightChild={
           <Button
             onClick={() => {
@@ -195,12 +197,12 @@ export default function Page() {
             }}
           >
             <Plus />
-            Создать запись
+            Добавить место
           </Button>
         }
       />
       <DataTable
-        containerClassname={styles["table-container"]}
+        containerClassname={adminStyles["table-container"]}
         columns={columns}
         data={places}
         dataLoading={isTableDataLoading}

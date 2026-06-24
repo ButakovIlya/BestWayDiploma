@@ -1,7 +1,7 @@
 "use client";
 
 import DashboardHeader from "../components/dashboard-header/dashboard-header";
-import styles from "./page.module.css";
+import adminStyles from "../lib/styles/admin-page.module.css";
 import { DataTable } from "@/app/components/table/data-table";
 import { useEffect, useState } from "react";
 import { columns } from "./lib/columns";
@@ -55,10 +55,14 @@ export default function Page() {
   }, []);
 
   return (
-    <div className={styles.page}>
-      <DashboardHeader title="Мои опросы" />
+    <div className={adminStyles.page}>
+      <DashboardHeader
+        badge="Админ"
+        title="Опросы"
+        subtitle="Просмотр и удаление пользовательских опросов на платформе."
+      />
       <DataTable
-        containerClassname={styles["table-container"]}
+        containerClassname={adminStyles["table-container"]}
         columns={columns}
         data={surveys}
         actions={actions}

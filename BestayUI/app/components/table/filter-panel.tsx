@@ -144,8 +144,9 @@ export function FilterPanel<TData>(props: FilterPanelProps<TData>) {
   return isMobile ? (
     <>
       <Sheet>
-        <SheetTrigger className="mb-4 flex items-center gap-2 rounded-full bg-[#eaf5ff] px-4 py-2 text-[#006096]">
-          <ListFilter />
+        <SheetTrigger className="mb-1 flex items-center gap-2 rounded-full border border-[#00609614] bg-[#eaf5ff] px-4 py-2.5 text-sm font-semibold text-[#006096] shadow-[0_8px_24px_rgba(0,96,150,0.08)]">
+          <ListFilter size={16} />
+          Фильтры
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>
@@ -158,7 +159,11 @@ export function FilterPanel<TData>(props: FilterPanelProps<TData>) {
       </Sheet>
     </>
   ) : (
-    <div className="mb-4 flex flex-wrap items-center gap-3 rounded-[26px] border border-[#00609614] bg-white/70 p-3 shadow-[0_10px_30px_rgba(0,96,150,0.06)]">
+    <div className="flex flex-wrap items-center gap-3 rounded-[26px] border border-[#00609614] bg-white/78 p-4 shadow-[0_10px_30px_rgba(0,96,150,0.06)]">
+      <div className="mr-1 flex items-center gap-2 pr-2 text-sm font-semibold text-[#006096]">
+        <ListFilter size={16} />
+        Фильтры
+      </div>
       {filters}
     </div>
   );

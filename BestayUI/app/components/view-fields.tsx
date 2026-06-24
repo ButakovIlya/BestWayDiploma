@@ -10,20 +10,25 @@ interface ViewFieldsProps {
 export function ViewFields(props: ViewFieldsProps) {
   const { fields } = props;
   return (
-    <div>
+    <div className={styles["field-grid"]}>
       {fields.map((field) => (
-        <div key={field.title}>
-          <p className={styles["field-title"]}>{field.title}:</p>
+        <div key={field.title} className={styles.field}>
+          <p className={styles["field-title"]}>{field.title}</p>
           {field.value ? (
             field.link ? (
-              <a href={field.value as string} target="_target">
+              <a
+                href={field.value as string}
+                target="_blank"
+                rel="noreferrer"
+                className={styles["field-value"]}
+              >
                 {field.value}
               </a>
             ) : (
-              <p>{field.value}</p>
+              <p className={styles["field-value"]}>{field.value}</p>
             )
           ) : (
-            <Skeleton className={clsx("h-4 w-30")} />
+            <Skeleton className={clsx("h-5 w-32")} />
           )}
         </div>
       ))}
