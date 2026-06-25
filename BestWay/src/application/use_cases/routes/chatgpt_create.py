@@ -51,12 +51,8 @@ class ChatGPTRouteGenerateUseCase(UseCase):
             data = await self._create_content(user_id, survey_id)
             logger.info(f"Content data: {data}")
             route_data = self._route_generate_gpt_manager.generate_route(data, Mode(mode))
-            # route_data = {
-            #     "name": "Маршрут по Пермскому театру, ресторану и цирку",
-            #     "type": "На машине",
-            #     "places": [89, 92, 93],
-            # }
             validated_route_data = await self._validate_generated_route(route_data, user_id)
+            self._validate_partial_route_slots(data, Mode(mode), validated_route_data)
             logger.info(f"validated_route_data: {validated_route_data}")
             if not validated_route_data.places:
                 raise APIException(
@@ -132,6 +128,50 @@ class ChatGPTRouteGenerateUseCase(UseCase):
         if value is None:
             return None
         return value.value if hasattr(value, "value") else str(value)
+
+    @staticmethod
+    def _validate_partial_route_slots(
+        content: ChatGPTContentData,
+        mode: Mode,
+        route_data: ChatGPTRouteData,
+    ) -> None:
+        if mode != Mode.PARTIAL:
+            return
+
+        slots = content.survey_data.places or {}
+        if not slots:
+            return
+
+        expected_count = len(slots)
+        actual_count = len(route_data.places)
+
+        if actual_count < expected_count:
+            raise APIException(
+                code=400,
+                message=(
+                    f"Маршрут собран не полностью: ожидалось {expected_count} мест "
+                    f"(по числу слотов конструктора), получено {actual_count}. "
+                    "Попробуйте сформировать маршрут ещё раз."
+                ),
+            )
+
+        fixed_ids = []
+        for slot in slots.values():
+            if isinstance(slot, dict):
+                place_id = slot.get("place_id")
+            else:
+                place_id = getattr(slot, "place_id", None)
+            if place_id is not None:
+                fixed_ids.append(place_id)
+        missing_fixed = [place_id for place_id in fixed_ids if place_id not in route_data.places]
+        if missing_fixed:
+            raise APIException(
+                code=400,
+                message=(
+                    "В сгенерированном маршруте отсутствуют места, "
+                    f"выбранные вручную: {missing_fixed}."
+                ),
+            )
 
     async def _validate_generated_route(self, route_data: dict, author_id: int) -> ChatGPTRouteData:
         try:

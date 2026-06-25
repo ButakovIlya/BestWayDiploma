@@ -50,7 +50,10 @@ class OpenAIRoutePlacesTools:
             {
                 "type": "function",
                 "name": "search_places",
-                "description": "Search places by keywords in name, description, tags and map_name. Use for each user wish from prompt.",
+                "description": (
+                    "Search places by keywords in name, description, tags, category and map_name. "
+                    "In constructor mode call once per unfilled route slot using description/category/type."
+                ),
                 "parameters": {
                     "type": "object",
                     "properties": {

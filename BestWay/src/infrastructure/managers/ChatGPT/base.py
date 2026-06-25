@@ -112,19 +112,18 @@ class BaseClassificationManager(ClassificationManager):
                 "order_matters": survey_preferences.get("order_matters"),
             }
 
+        route_slots = survey_data.get("places") or {}
+
         return {
-            "payload_json": json.dumps(
-                {
-                    "places_data": survey_data.get("places") or {},
-                    "data_data": user_data,
-                    "user_data": survey_data.get("data") or {},
-                    "city": survey_data.get("city") or "",
-                    "prompt": survey_data.get("prompt") or "",
-                },
-                ensure_ascii=False,
-            ),
-            "user_data": user_data,
-            "survey_data": survey_data,
+            "mode": "constructor_partial",
+            "city": survey_data.get("city") or "",
+            "preferred_transport": survey_preferences.get("preferred_transport") or "",
+            "preferences": survey_preferences.get("questions") or {},
+            "order_matters": survey_preferences.get("order_matters"),
+            "route_slots": route_slots,
+            "slots_count": len(route_slots),
+            "user_profile": user_data,
+            "prompt": survey_data.get("prompt") or "",
         }
 
     def _parse_chatgpt_response(self, response) -> dict[str, Any]:
