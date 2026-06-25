@@ -8,3 +8,10 @@
   height: calc(100dvh - 190px);
   min-height: 420px;
 }
+
+@media (max-width: 768px) {
+  .table-container {
+    height: auto;
+    min-height: 320px;
+  }
+}

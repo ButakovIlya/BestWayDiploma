@@ -1,6 +1,7 @@
 "use client";
 import styles from "./layout.module.css";
 import { DashboardSidebar } from "./components/dashboard-sidebar";
+import { DashboardMobileBar } from "./components/dashboard-mobile-bar";
 import { SidebarProvider } from "../components/ui/sidebar";
 import { Toaster } from "../components/ui/sonner";
 import { useEffect, useState } from "react";
@@ -138,7 +139,10 @@ export default function Layout(props: React.PropsWithChildren) {
                   : styles["layout__children--desktop"],
               )}
             >
-              <div className={styles["layout__content-card"]}>{children}</div>
+              <div className={styles["layout__content-card"]}>
+                {isMobile ? <DashboardMobileBar /> : null}
+                {children}
+              </div>
             </div>
           </SidebarProvider>
           <Toaster theme="light" />

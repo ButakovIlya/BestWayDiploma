@@ -118,7 +118,7 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
       <Table
         containerClassname={cn(
           containerClassname,
-          "min-h-[320px] flex-1 overflow-auto rounded-[28px] border border-[#0060961f] bg-white/92 shadow-[0_18px_55px_rgba(0,96,150,0.08)]",
+          "min-h-[280px] flex-1 overflow-auto rounded-[22px] border border-[#0060961f] bg-white/92 shadow-[0_18px_55px_rgba(0,96,150,0.08)] md:min-h-[320px] md:rounded-[28px]",
         )}
         className={cn(
           className,
@@ -131,7 +131,7 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
               {headerGroup.headers.map((header) => (
                 <TableHead
                   key={header.id}
-                  className="h-14 px-5 text-sm font-bold tracking-wide text-[#123047]"
+                  className="h-12 px-3 text-xs font-bold tracking-wide text-[#123047] md:h-14 md:px-5 md:text-sm"
                 >
                   {header.isPlaceholder
                     ? null
@@ -162,7 +162,7 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
                   <TableCell
                     key={cell.id}
                     className={clsx(
-                      "px-5 py-4 text-[15px] leading-relaxed text-[#1f3344]",
+                      "px-3 py-3 text-sm leading-relaxed text-[#1f3344] md:px-5 md:py-4 md:text-[15px]",
                       cell.id.includes("actions") &&
                         "sticky right-0 z-0 bg-white/90 backdrop-blur",
                     )}

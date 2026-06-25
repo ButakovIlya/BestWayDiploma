@@ -30,7 +30,7 @@ export default function DashboardHeader(props: DashboardHeaderProps) {
           >
             <Link href={backHref}>
               <ArrowLeft />
-              Назад
+              {!isMobile ? "Назад" : null}
             </Link>
           </Button>
         ) : null}

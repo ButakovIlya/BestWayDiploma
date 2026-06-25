@@ -10,3 +10,14 @@
   flex: 1;
   min-height: 0;
 }
+
+@media (max-width: 768px) {
+  .page {
+    gap: 14px;
+    min-height: auto;
+  }
+
+  .table-container {
+    min-height: 280px;
+  }
+}

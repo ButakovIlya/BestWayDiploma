@@ -10,3 +10,11 @@
   padding: 8px 8px 1rem;
   border-radius: 30px;
 }
+
+@media (max-width: 768px) {
+  .feed-container {
+    max-height: none;
+    padding: 4px 0 1rem;
+    border-radius: 0;
+  }
+}

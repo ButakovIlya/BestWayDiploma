@@ -94,4 +94,8 @@
   .dashboard-header__actions :global(button) {
     width: 100%;
   }
+
+  .dashboard-header__subtitle {
+    font-size: 14px;
+  }
 }

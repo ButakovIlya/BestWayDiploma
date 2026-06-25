@@ -221,4 +221,27 @@
   .mapEmpty {
     min-height: 360px;
   }
+
+  .hero {
+    padding: 14px;
+    border-radius: 24px;
+  }
+
+  .heroMedia,
+  .heroFallback,
+  .heroImage {
+    min-height: 200px;
+    border-radius: 18px;
+  }
+
+  .heroTop {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
 }

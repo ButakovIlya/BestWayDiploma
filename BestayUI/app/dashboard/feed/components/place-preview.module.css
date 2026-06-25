@@ -56,3 +56,29 @@
   height: 100%;
   width: 100%;
 }
+
+@media (max-width: 768px) {
+  .place-container {
+    flex-direction: column;
+    border-radius: 20px;
+  }
+
+  .place-container__info,
+  .place-container__photo-containter {
+    width: 100%;
+  }
+
+  .place-container__info {
+    padding: 0.75rem 1rem;
+  }
+
+  .photo-containter__photo {
+    min-height: 160px;
+    aspect-ratio: 16 / 9;
+  }
+
+  .info-container {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}

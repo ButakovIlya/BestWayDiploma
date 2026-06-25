@@ -128,3 +128,34 @@
   object-fit: cover;
   display: block;
 }
+
+@media (max-width: 768px) {
+  .card {
+    grid-template-columns: 32px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .marker {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+
+  .content {
+    padding: 14px;
+    border-radius: 20px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .link {
+    white-space: normal;
+  }
+
+  .photo {
+    height: 160px;
+  }
+}

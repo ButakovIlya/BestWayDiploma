@@ -47,5 +47,19 @@
   .detail__card {
     padding: 18px;
     border-radius: 26px;
+    gap: 18px;
+  }
+
+  .detail__media {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .detail__fields {
+    flex: 1 1 100%;
+  }
+
+  .detail__section-title {
+    font-size: 18px;
   }
 }

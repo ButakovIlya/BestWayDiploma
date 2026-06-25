@@ -173,3 +173,27 @@
   margin: 8px 12px;
   opacity: 0.6;
 }
+
+@media (max-width: 767px) {
+  .sidebar:not([data-mobile="true"]) {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    margin: 0;
+    min-height: auto;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+
+  .brand {
+    padding: 16px 16px 12px;
+  }
+
+  .nav-item__description {
+    white-space: normal;
+  }
+}

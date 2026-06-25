@@ -1,0 +1,15 @@
+@media (max-width: 768px) {
+  .stackOnMobile {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .fullWidthOnMobile {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .hideOnMobile {
+    display: none !important;
+  }
+}

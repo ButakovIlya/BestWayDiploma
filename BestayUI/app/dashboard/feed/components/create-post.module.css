@@ -27,3 +27,17 @@
   border-radius: 1rem;
   padding: 0.5rem 1rem;
 }
+
+@media (max-width: 768px) {
+  .container {
+    position: static;
+    padding-top: 0.5rem;
+    max-width: 100%;
+  }
+
+  .input-container {
+    flex-direction: column;
+    gap: 10px;
+    padding: 0.75rem;
+  }
+}

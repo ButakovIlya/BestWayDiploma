@@ -1,0 +1,39 @@
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: -4px 0 14px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 96, 150, 0.1);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 8px 24px rgba(0, 96, 150, 0.08);
+}
+
+.menuButton {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  color: #123047;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.subtitle {
+  color: var(--bw-muted);
+  font-size: 12px;
+  line-height: 1.2;
+}

@@ -13,3 +13,16 @@
   border: 1px solid rgba(0, 96, 150, 0.1);
   box-shadow: var(--bw-soft-shadow);
 }
+
+@media (max-width: 768px) {
+  .page__content__photos {
+    flex: 1 1 100%;
+    flex-direction: column;
+    border-radius: 20px;
+  }
+
+  .map-card {
+    border-radius: 20px;
+    min-height: 280px;
+  }
+}

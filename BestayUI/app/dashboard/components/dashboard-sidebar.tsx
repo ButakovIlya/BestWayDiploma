@@ -25,6 +25,8 @@ import styles from "./dashboard-sidebar.module.css";
 import { SidebarPages } from "../types/sidebar-pages";
 import { BackendImage } from "@/app/components/backend-image";
 import { ShieldCheck } from "lucide-react";
+import { useSidebar } from "@/app/components/ui/sidebar";
+import { useIsMobile } from "@/app/hooks/use-mobile";
 
 function NavLink({
   item,
@@ -33,11 +35,18 @@ function NavLink({
   item: (typeof PUBLIC_URLS)[number];
   isActive: boolean;
 }) {
+  const { setOpenMobile, isMobile } = useSidebar();
+
   return (
     <SidebarMenuButton asChild tooltip={item.title}>
       <Link
         href={item.url}
         className={clsx(isActive && styles["selected"])}
+        onClick={() => {
+          if (isMobile) {
+            setOpenMobile(false);
+          }
+        }}
       >
         <item.icon />
         <span className={styles["nav-item"]}>
@@ -58,11 +67,23 @@ export function DashboardSidebar() {
     account: { user },
     ui: { currentPage },
   } = useAppStore((state) => state);
+  const isMobile = useIsMobile();
+  const { setOpenMobile } = useSidebar();
 
   const BrandIcon = BRAND_ICON;
 
+  const closeMobileSidebar = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
   return (
-    <Sidebar variant="sidebar" collapsible="none" className={styles.sidebar}>
+    <Sidebar
+      variant="sidebar"
+      collapsible={isMobile ? "offcanvas" : "none"}
+      className={styles.sidebar}
+    >
       <SidebarContent style={{ overflowX: "hidden" }}>
         <div className={styles.brand}>
           <div className={styles["brand__icon"]}>
@@ -128,6 +149,7 @@ export function DashboardSidebar() {
                 className={clsx(
                   currentPage === SidebarPages.Account && styles["selected"],
                 )}
+                onClick={closeMobileSidebar}
               >
                 <BackendImage
                   alt="avatar"
