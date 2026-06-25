@@ -22,8 +22,27 @@
   border-radius: 42px;
 }
 
+.form__code-step {
+  height: auto;
+  min-height: 620px;
+  max-height: 92dvh;
+  padding: 32px 36px 36px;
+}
+
+.form__desktop.form__code-step {
+  width: 460px;
+  height: auto;
+  min-height: 680px;
+}
+
 @media (max-width: 768px) {
   .form__centered {
     padding: 84px 28px;
+  }
+
+  .form__code-step {
+    padding: 72px 20px 28px;
+    min-height: 100dvh;
+    max-height: none;
   }
 }

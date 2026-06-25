@@ -23,7 +23,8 @@ import { sendAuthCode } from "@/app/lib/api/public/auth";
 
 export default function PhoneForm() {
   const { login } = useAppStore((state) => state);
-  const { isSentCode, setIsSentCode, setPhone, increaseSentTimes } = login;
+  const { isSentCode, setIsSentCode, setPhone, setCode, increaseSentTimes } =
+    login;
   const form = useForm<PhoneSchema>({
     resolver: zodResolver(PHONE_SCHEMA),
     defaultValues: { phone: "" },
@@ -40,11 +41,11 @@ export default function PhoneForm() {
 
     sendAuthCode(phone)
       .then((data) => {
-        toast(`Код для номера ${phone}`, {
-          description: data.message,
-          duration: 5000,
-        });
+        setCode(data.message ?? "");
         setIsSentCode(true);
+        toast.success("Код отправлен", {
+          description: `Проверьте SMS на ${phone}`,
+        });
       })
       .catch(() => {
         toast.error("Не удалось отправить код");

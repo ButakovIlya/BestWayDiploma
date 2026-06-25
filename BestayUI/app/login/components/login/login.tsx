@@ -32,6 +32,7 @@ export default function Login() {
       className={clsx(
         styles["form__centered"],
         !isMobile && styles["form__desktop"],
+        isSentCode && styles["form__code-step"],
       )}
     >
       {isSentCode ? <CodeForm /> : <PhoneForm />}

@@ -8,7 +8,7 @@ export default function Layout({
   return (
     <>
       {children}
-      <Toaster theme="light" />
+      <Toaster theme="light" position="top-center" richColors />
     </>
   );
 }
